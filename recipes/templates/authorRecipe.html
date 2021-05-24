@@ -1,0 +1,83 @@
+<!doctype html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Рецепты</title>
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+</head>
+<body class="body">
+  <header class="header">
+      <nav class="nav">
+          <div class="nav__container container">
+              {% include 'includes/navbar.html' %}
+          </div>
+      </nav>
+  </header>
+    <main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">{{ author.username }}</h1>
+            <ul class="tags">
+                <li class="tags__item">
+                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
+                    <span class="tags__label">Завтрак</span>
+                </li>
+                <li class="tags__item">
+                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
+                    <span for="lunch" class="tags__label">Обед</span>
+                </li>
+                <li class="tags__item">
+                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
+                    <label for="dinner" class="tags__label">Ужин</label>
+                </li>
+            </ul>
+        </div>
+            <li class="list-group-item">
+              {% if following %}
+                <a class="button button_style_light-blue button_size_auto" href="{% url 'profile_unfollow' author %}" role="button">Отписаться</a>
+              {% elif author != user %}
+                <a class="button button_style_light-blue button_size_auto" href="{% url 'profile_follow' author %}" role="button">Подписаться</a>
+              {% else %}
+                <a class="button button_style_light-blue button_size_auto" role="button">Подписаться</a>
+              {% endif %}
+            </li>
+        </div>
+        <div class="card-list">
+            {% for recipe in page_obj %}
+                {% include 'includes/recipe_card.html' with recipe=recipe %}
+            {% endfor %}
+        </div>
+        <nav class="pagination" aria-label="Search results pages">
+            <ul class="pagination__container">
+                {% if page_obj.has_other_pages %}
+                    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+                {% endif %}
+            </ul>
+        </nav>
+    </main>
+    <footer class="footer">
+        <div class="footer__container container">
+            <a href="#" class="footer__brand link">Продуктовый помощник</a>
+            <ul class="footer__items">
+                <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
+                <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
+            </ul>
+        </div>
+    </footer>
+  <script src="{% static 'js/components/MainCards.js' %}"></script>
+
+  <script src="{% static 'js/components/Purchases.js' %}"></script>
+  <script src="{% static 'js/components/Favorites.js' %}"></script>
+  <script src="{% static 'js/components/Subscribe.js' %}"></script>
+
+  <script src="{% static 'js/config/config.js' %}"></script>
+  <script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
+  <script src="{% static 'js/components/Header.js' %}"></script>
+
+  <script src="{% static 'js/api/Api.js' %}"></script>
+  <script src="{% static 'authorRecipe.js' %}"></script>
+</body>
+</html>
