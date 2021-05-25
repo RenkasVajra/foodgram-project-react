@@ -11,7 +11,6 @@ urlpatterns = [
     path('<str:username>/',  views.profile, name='profile'),
     path('<str:username>/follow/', views.profile_follow, name='profile_follow'),
     path('<str:username>/unfollow/', views.profile_unfollow, name='profile_unfollow'),
-    path('<str:username>/<int:recipe_id>/edit/', views.recipe_edit, name='recipe_edit'),
-    path("recipes/<int:pk>/", views.RecipeDetailView.as_view(), name="recipe"),
-
+    path('recipes/<int:pk>/', views.RecipeDetailView.as_view(), name='recipe'),
+    path("recipes/edit/<int:id>/", views.recipe_edit, name='recipe_edit'),
 ]

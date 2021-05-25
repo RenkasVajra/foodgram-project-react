@@ -7,10 +7,9 @@
             <a class="card__title link" href="{% url 'recipe' pk=recipe.id %}" target="_blank">{{ recipe.title }}</a>
               <ul class="card__items">
                 {% for tag in recipe.tags.all %}
-                    <li class="tags__item">
-                       <a id="breakfast" class="tags__checkbox {{ tag.color }} tags__checkbox_active" href="#"></a>
-                        <span class="tags__label">{{ tag }}</span>
-                    </li>
+                    <ul class="card__items">
+                        <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
+                    </ul>
                 {% endfor %}
               </ul>
               <div class="card__items card__items_column">

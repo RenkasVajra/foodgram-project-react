@@ -158,32 +158,32 @@ def new_recipe(request):
 
 
 @login_required
-def recipe_edit(request, username, recipe_id):
-    recipe = get_object_or_404(Recipe, author__username=username, pk=recipe_id)
-    form = RecipesForm(
-        request.POST or None,
-        files=request.FILES or None,
-        instance=recipe
-    )
-
-    if recipe.author != request.user:
-        return render(request, 'recipePage.html', {
-            'username': username,
-            'post_id': recipe.pk,
-            },
-        )
-
+def recipe_edit(request, id):
+    recipe_base = get_object_or_404(Recipe, pk=id)
+    form = RecipesForm(request.POST or None, files=request.FILES or None, instance=recipe_base)
+    ingredients = get_ingredients(request)
     if not form.is_valid():
         return render(request, 'formRecipe.html', {
-            'username': username,
-            'recipe_id': recipe.pk,
-            'recipe': recipe,
-            'form': form
+            'form': form,
+            'is_new': True,
             },
         )
-
-    form.save()
-    return redirect('recipePage.html', username, recipe_id)
+    recipe = form.save(commit=False)
+    recipe.user = request.user
+    recipe.save()
+    RecipeIngredient.objects.filter(recipe=recipe).delete()
+    objs = []
+    for title, count in ingredients.items():
+        ingredient = get_object_or_404(Ingredient, title=title)
+        objs.append(RecipeIngredient(
+            recipe=recipe,
+            ingredient=ingredient,
+            count=count
+        )
+        )
+    RecipeIngredient.objects.bulk_create(objs)
+    form.save_m2m()
+    return redirect('index')
 
 
 def profile(request, username):
@@ -213,7 +213,7 @@ def load_list(request, username):
 
 def subscriptions(request, username):
     author = get_object_or_404(User, username=username)
-    followers = author.follower.exists()
+    followers = author.follower.all().exists()
     context = {
         'author': author,
         'follower': followers

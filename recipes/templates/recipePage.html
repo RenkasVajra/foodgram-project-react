@@ -35,10 +35,7 @@
                 </div>
                     <ul class="card__items">
                     {% for tag in recipe.tags.all %}
-                        <li class="tags__item">
-                           <a id="breakfast" class="tags__checkbox {{ tag.color }} tags__checkbox_active" href="#"></a>
-                            <span class="tags__label">{{ tag }}</span>
-                        </li>
+                        <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
                     {% endfor %}
                   </ul>
                 <div class="single-card__items single-card__items_column">
@@ -48,13 +45,18 @@
                 <ul class="single-card__items">
                     <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% if user.is_authenticated %}
-                        <li class="single-card__item">  <a style="margin-left: 2.5em" href="#" class="single-card__text">Редактировать рецепт</a></li>
+                       <li class="single-card__item"> <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}"
+                                class="single-card__text">Редактировать рецепт</a></li>
                     {% endif %}
                 </ul>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингридиенты:</h3>
                     <div class="single-card__items single-card__items_column">
-                        {{ recipe.ingredient }}
+                        {% for ingredient in recipe.recipe.all %}
+                            <p class=" single-card__section-item">
+                                {{ ingredient.ingredient.title }} - {{ ingredient.count }} - {{ ingredient.ingredient.unit }}
+                            </p>
+                        {% endfor %}
                     </div>
                 </div>
                 <div class="single-card__section">
