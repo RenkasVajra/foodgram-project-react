@@ -1,12 +1,12 @@
 <!doctype html>
-{% load static %}
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Французские тосты</title>
+    <title>{{ recipe.title }}</title>
     <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 </head>
 <body class="body">
@@ -18,7 +18,7 @@
     </nav>
 </header>
     <main class="main container">
-        <div class="single-card" data-id="371">
+        <div class="card-user" data-author="{{ author.id }}">
             {% load thumbnail %}
                 {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
                 <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
@@ -41,12 +41,15 @@
                 <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                     <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
+                    <button class="button button_style_light-blue" name="purchases" data-out><span
+                        class="icon-plus button__icon"></span>Добавить в покупки</button>
                 </div>
                 <ul class="single-card__items">
-                    <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% if user.is_authenticated %}
+                    {% if recipe.author == request.user %}
                        <li class="single-card__item"> <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}"
                                 class="single-card__text">Редактировать рецепт</a></li>
+                    {% endif %}
                     {% endif %}
                 </ul>
                 <div class="single-card__section">
@@ -65,6 +68,15 @@
                 </div>
             </div>
         </div>
+        {% if recipe.author != request.user %}
+            <div class="card-user__footer">
+                {% if following %}
+                    <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
+                {% else %}
+                    <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
+                {% endif %}
+            </div>
+        {% endif %}
     </main>
     <footer class="footer">
         <div class="footer__container container">
@@ -76,7 +88,7 @@
         </div>
     </footer>
 <script src="{% static 'js/components/Purchases.js'%}"></script>
-<script src="./js/config/config.js"></script>
+<script src="{% static './js/config/config.js' %}"></script>
 
 <script src="{% static 'js/components/MainCards.js' %}"></script>
 <script src="{% static 'js/components/SingleCard.js' %}"></script>
@@ -84,9 +96,9 @@
 
 <script src="{% static 'js/api/Api.js' %}"></script>
 {% if user.is_authenticated %}
-    <script src="{% static 'singlePage.js' %}"></script>
     <script src="{% static 'js/components/Favorites.js' %}"></script>
     <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
 {% else %}
     <script src="{% static 'singlePageNotAuth.js' %}"></script>
 {% endif %}

@@ -1,5 +1,4 @@
-import json
-
+from django.http import HttpResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -32,19 +31,23 @@ class IsFavoriteMixin:
 class BaseRecipeListView(IsFavoriteMixin, ListView):
     context_object_name = 'recipe_list'
     queryset = Recipe.objects.all()
-    paginate_by = 60
+    paginate_by = 6
     page_title = None
 
     def get_context_data(self, **kwargs):
-        kwargs.update({'page_title': self._get_page_title()})
-
+        kwargs.update({'page_title': self._get_page_title(),
+                       'shopping_list': self._get_shopping_list()})
         context = super().get_context_data(**kwargs)
         return context
 
     def _get_page_title(self):
         assert self.page_title, f"Attribute 'page_title' not set for {self.__class__.__name__}"  # noqa
-
         return self.page_title
+
+    def _get_shopping_list(self):
+        if self.request.user.is_authenticated:
+            shopping_list = ShoppingList.objects.filter(user=self.request.user).all()
+            return shopping_list
 
 
 class FavouriteView(LoginRequiredMixin, BaseRecipeListView):
@@ -61,11 +64,9 @@ class SubscriptionsView(LoginRequiredMixin, BaseRecipeListView):
     template_name = 'myFollow.html'
 
     def get_queryset(self):
-        qs = Follow.objects.all()
         user = self.request.user
-        qs = qs.filter(user=user)
+        qs = user.following.all()
         print(qs)
-        print('HERE')
 
         return qs
 
@@ -131,10 +132,12 @@ def new_recipe(request):
     ingredients = get_ingredients(request)
 
     if not form.is_valid():
-        return render(request, 'formRecipe.html', {
-            'form': form,
-            'is_new': True,
-            },
+        return render(
+            request,
+            'formRecipe.html',
+            {'form': form,
+             'is_new': True,
+             },
         )
 
     recipe = form.save(commit=False)
@@ -163,10 +166,12 @@ def recipe_edit(request, id):
     form = RecipesForm(request.POST or None, files=request.FILES or None, instance=recipe_base)
     ingredients = get_ingredients(request)
     if not form.is_valid():
-        return render(request, 'formRecipe.html', {
-            'form': form,
-            'is_new': True,
-            },
+        return render(
+            request,
+            'formRecipe.html',
+            {'form': form,
+             'is_new': True,
+             },
         )
     recipe = form.save(commit=False)
     recipe.user = request.user
@@ -198,45 +203,6 @@ def profile(request, username):
     return render(request, 'authorRecipe.html', context)
 
 
-@login_required
-def load_list(request, username):
-    author = get_object_or_404(User, username=username)
-    shopping_list = get_object_or_404(ShoppingList, user=request.user, author=author)
-    if shopping_list.list is None:
-        return JsonResponse({'success': False})
-    field_name_sum = ShoppingList.objects.aggregate(Sum('shopping_list__ingredient'))
-    with open('data_file.json', 'w') as read_file:
-        data = json.load(read_file)
-        read_file.write(field_name_sum)
-    return JsonResponse({'success': True})
-
-
-def subscriptions(request, username):
-    author = get_object_or_404(User, username=username)
-    followers = author.follower.all().exists()
-    context = {
-        'author': author,
-        'follower': followers
-    }
-    return render(request, 'myFollow.html', context)
-
-
-@login_required
-def profile_follow(request, username):
-    author = get_object_or_404(User, username=username)
-    following = author.following.exists()
-    if request.user != author and not following:
-        Follow.objects.get_or_create(user=request.user, author=author)
-    return redirect('profile', username=username)
-
-
-@login_required
-def profile_unfollow(request, username):
-    author = get_object_or_404(User, username=username)
-    get_object_or_404(Follow, user=request.user, author=author).delete()
-    return redirect('profile', username=username)
-
-
 def page_not_found(request, exception):
     return render(
         request,
@@ -248,3 +214,36 @@ def page_not_found(request, exception):
 
 def server_error(request):
     return render(request, "misc/500.html", status=500)
+
+
+def shopping_list_download(request):
+    result = shopping_list_ingredients(request)
+    response = HttpResponse(result, content_type='text/plain')
+    response['Content-Disposition'] = 'attachment; filename = download.txt'
+    return response
+
+
+def shopping_list(request):
+    shopping_list = ShoppingList.objects.filter(user=request.user).all()
+    return render(
+        request,
+        'shopList.html',
+        {'shopping_list': shopping_list,},
+    )
+
+
+def shopping_list_ingredients(request):
+    shopping_list = ShoppingList.objects.filter(user=request.user).all()
+    ingredients = {}
+    for item in shopping_list:
+        for x in item.recipe.recipe.all():
+            name = f'{x.ingredient.title} ({x.ingredient.unit})'
+            units = x.count
+            if name in ingredients.keys():
+                ingredients[name] += units
+            else:
+                ingredients[name] = units
+    download = []
+    for key, units in ingredients.items():
+        download.append(f'{key} - {units} \n')
+    return download

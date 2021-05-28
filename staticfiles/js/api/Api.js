@@ -23,18 +23,18 @@ class Api {
             'X-CSRFToken': csrftoken,
       }
     }
-  getPurchases () {
-    return fetch(`${this.apiUrl}/purchases/`, {
-      headers: this.headers,
+    getPurchases() {
+    return fetch(`/purchases`, {
+      headers: this.headers
     })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
+      .then(e => {
+        if (e.ok) {
+          return e.json()
+        }
+        return Promise.reject(e.statusText)
       })
   }
-  addPurchases (id) {
+  addPurchases(id) {
     return fetch(`${this.apiUrl}/purchases/`, {
       method: 'POST',
       headers: this.headers,
@@ -42,52 +42,52 @@ class Api {
         id: id
       })
     })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
+      .then(e => {
+        if (e.ok) {
+          return e.json()
+        }
+        return Promise.reject(e.statusText)
       })
   }
-  removePurchases (id){
-    return fetch(`${this.apiUrl}/purchases/${id}`, {
+  removePurchases(id) {
+    return fetch(`${this.apiUrl}/purchases/${id}/`, {
       method: 'DELETE',
-      headers: this.headers,
+      headers: this.headers
     })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
+      .then(e => {
+        if (e.ok) {
+          return e.json()
+        }
+        return Promise.reject(e.statusText)
       })
   }
   addSubscriptions(id) {
-    return fetch(`${this.apiUrl}/follows`, {
-      method: 'POST',
-      headers: this.headers,
-      body: JSON.stringify({
-        id: id
-      })
+  return fetch(`${this.apiUrl}/subscriptions/`, {
+    method: 'POST',
+    headers: this.headers,
+    body: JSON.stringify({
+      id: id
     })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
-      })
-  }
+  })
+    .then( e => {
+        if(e.ok) {
+            return e.json()
+        }
+        return Promise.reject(e.statusText)
+    })
+}
   removeSubscriptions (id) {
-    return fetch(`${this.apiUrl}/follows/${id}`, {
-      method: 'DELETE',
-      headers: this.headers,
+  return fetch(`${this.apiUrl}/subscriptions/${id}/`, {
+    method: 'DELETE',
+    headers: this.headers,
+  })
+    .then( e => {
+        if(e.ok) {
+            return e.json()
+        }
+        return Promise.reject(e.statusText)
     })
-      .then( e => {
-          if(e.ok) {
-              return e.json()
-          }
-          return Promise.reject(e.statusText)
-      })
-  }
+}
   addFavorites (id)  {
     return fetch(`${this.apiUrl}/favorites/`, {
       method: 'POST',

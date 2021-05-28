@@ -55,4 +55,3 @@ class AuthorRecipe extends MainCards{
         }
     }
 }
-

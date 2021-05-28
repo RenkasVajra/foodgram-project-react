@@ -117,20 +117,21 @@ class FavoriteRecipes(models.Model):
 
 
 class ShoppingList(models.Model):
-    recipe = models.ForeignKey(
-        Recipe,
-        on_delete=models.CASCADE,
-        related_name='shopping_recipe',
-        verbose_name='Рецепт'
-    )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name='shopping_user',
-        verbose_name='Пользователь'
+        related_name="buyer",
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="shopping_list",
+        verbose_name='Рецепт'
     )
 
-    document = models.FileField(upload_to='media/',)
+    class Meta:
+        verbose_name = 'Список покупок'
+        verbose_name_plural = 'Список покупок'
 
 
 class Follow(models.Model):

@@ -55,5 +55,5 @@ class ShoppingListForm(ModelForm):
 
     class Meta:
         model = ShoppingList
-        fields = ('recipe', 'document', 'user')
+        fields = ('recipe', 'user')
         labels = {'recipe': 'Рецепт', 'user': 'Пользователь'}

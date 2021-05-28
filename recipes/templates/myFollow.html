@@ -1,163 +1,86 @@
 <!doctype html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Мои подписки</title>
-    <link rel="stylesheet" href="{% static './pages/myFollow.css' %}">
+    <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 </head>
 <body class="body">
-<header class="header">
-    <nav class="nav">
-        <div class="nav__container container">
-            {% include 'includes/navbar.html' %}
+    <header class="header">
+        {% include 'includes/navbar.html' %}
+    </header>
+    <main class="main container">
+        <div class="main__header">
+            <h1 class="main__title">Мои подписки</h1>
         </div>
-    </nav>
-</header>
-<main class="main container">
-    <div class="main__header">
-        <h1 class="main__title">Мои подписки</h1>
-    </div>
-    <div class="card-list">
-        <div class="card-user" data-author="700">
-        <div class="card-user__header">
-            <h2 class="card-user__title">Вероника Чернова</h2>
+        <div class="card-list">
+            {% for follow in user.follower.all %}
+            <div class="card-user" data-author="{{ follow.author.id }}">
+                <div class="card-user__header">
+                    <h2 class="card-user__title">{{ follow.author }}</h2>
+                </div>
+                <div class="card-user__body">
+                    <ul class="card-user__items">
+                        {% for recipe in follow.author.recipes.all|slice:"3" %}
+                        <li class="card-user__item">
+                            <div class="recipe">
+                                    {% load thumbnail %}
+                                        {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
+                                        <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
+                                    {% endthumbnail %}
+                                <h3 class="recipe__title">{{ recipe.title }}</h3>
+                                <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.
+                                </p>
+                            </div>
+                            {% endfor %}
+                        </li>
+                        <li class="card-user__item">
+                            <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">
+                                {% if follow.author.recipes.all|length == 0 %}
+                                    У пользователя нет рецептов.
+                                {% elif follow.author.recipes.all|length <= 3 %}
+                                    <p></p>
+                                {% elif follow.author.recipes.all|length|add:'-3' == 1 %}
+                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецепт...
+                                {% elif follow.author.recipes.all|length|add:'-3' < 5 %}
+                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептa...
+                                {% else %}
+                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептов...
+                                {% endif %}
+                            </a>
+                        </li>
+                    </ul>
+            </div>
+                {% if recipe.author != request.user %}
+                    <div class="card-user__footer">
+                        {% if following %}
+                            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
+                        {% else %}
+                            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+            {% endfor %}
         </div>
-        <div class="card-user__body">
-            <ul class="card-user__items">
-                <li class="card-user__item">
-                    <div class="recipe">
-                        <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                        <h3 class="recipe__title">Французские тосты</h3>
-                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                    </div>
-                </li>
-                <li class="card-user__item">
-                    <div class="recipe">
-                        <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                        <h3 class="recipe__title">Французские тосты</h3>
-                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                    </div>
-                </li>
-                <li class="card-user__item">
-                    <div class="recipe">
-                        <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                        <h3 class="recipe__title">Французские тосты</h3>
-                        <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                    </div>
-                </li>
-                <li class="card-user__item">
-                    <a href="#" class="card-user__link link">Еще 7 рецептов...</a>
-                </li>
+        <nav class="pagination" aria-label="Search results pages">
+            <ul class="pagination__container">
+                {% if page_obj.has_other_pages %}
+                    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+                {% endif %}
             </ul>
-        </div>
-        <div class="card-user__footer">
-            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
-        </div>
-    </div>
-        <div class="card-user" data-author="707">
-            <div class="card-user__header">
-                <h2 class="card-user__title">Вероника Чернова</h2>
-            </div>
-            <div class="card-user__body">
-                <ul class="card-user__items">
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <a href="#" class="card-user__link link">Еще 7 рецептов...</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-user__footer">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
-            </div>
-        </div>
-        <div class="card-user" data-author="7091">
-            <div class="card-user__header">
-                <h2 class="card-user__title">Вероника Чернова</h2>
-            </div>
-            <div class="card-user__body">
-                <ul class="card-user__items">
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <div class="recipe">
-                            <img src="./images/testCardImg.png" alt="какой-то-текст" class="recipe__image">
-                            <h3 class="recipe__title">Французские тосты</h3>
-                            <p class="recipe__text"><span class="icon-time"></span> 20 мин.</p>
-                        </div>
-                    </li>
-                    <li class="card-user__item">
-                        <a href="#" class="card-user__link link">Еще 7 рецептов...</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-user__footer">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
-            </div>
-        </div>
-    </div>
-    <nav class="pagination" aria-label="Search results pages">
-        <ul class="pagination__container">
-            <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
-            <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="#">1</a></li>
-            <li class="pagination__item"><a class="pagination__link link" href="#">2</a></li>
-            <li class="pagination__item"><a class="pagination__link link" href="#">3</a></li>
-            <li class="pagination__item"><a class="pagination__link link" href="#">4</a></li>
-            <li class="pagination__item"><a class="pagination__link link" href="#">5</a></li>
-            <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-right"></span></a></li>
-        </ul>
-    </nav>
-</main>
-<footer class="footer">
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
-<script src="{% static './js/config/config.js' %}"></script>
-<script src="{% static './js/components/MainCards.js' %}"></script>
-<script src="{% static './js/components/MyFollow.js' %}"></script>
-<script src="{% static './js/components/Subscribe.js' %}"></script>
-<script src="{% static './js/components/Header.js' %}"></script>
-<script src="{% static './js/api/Api.js' %}"></script>
-<script src="{% static 'myFollow.js' %}"></script>
-
+        </nav>
+    </main>
+    <script src="{% static 'js/config/config.js' %}"></script>
+    <script src="{% static 'js/components/MainCards.js' %}"></script>
+    <script src="{% static 'js/components/MyFollow.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'js/components/Header.js' %}"></script>
+    <script src="{% static 'js/api/Api.js' %}"></script>
+    <script src="{% static 'myFollow.js' %}"></script>
 </body>
 </html>
