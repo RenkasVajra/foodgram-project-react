@@ -18,7 +18,7 @@
     </nav>
 </header>
     <main class="main container">
-        <div class="card-user" data-author="{{ author.id }}">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             {% load thumbnail %}
                 {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
                 <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
@@ -52,13 +52,6 @@
                                 class="single-card__text">Редактировать рецепт</a></li>
                     {% endif %}
                     {% endif %}
-                    {% if recipe.author != request.user %}
-                    {% if following %}
-                        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
-                        {% else %}
-                        <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
-                        {% endif %}
-                    {% endif %}
                 </ul>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингридиенты:</h3>
@@ -87,7 +80,7 @@
         </div>
     </footer>
 <script src="{% static 'js/components/Purchases.js'%}"></script>
-<script src="{% static './js/config/config.js' %}"></script>
+<script src="{% static 'js/config/config.js' %}"></script>
 
 <script src="{% static 'js/components/MainCards.js' %}"></script>
 <script src="{% static 'js/components/SingleCard.js' %}"></script>
