@@ -208,7 +208,7 @@ def recipe_edit(request, id):
 def profile(request, username):
     author = get_object_or_404(User, username=username)
     page_obj = author.recipes.all()
-    following = author.following.exists()
+    following = request.user.follower.filter(author=author).exists()
     context = {
         'author': author,
         'following': following,
