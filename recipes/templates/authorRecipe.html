@@ -25,7 +25,7 @@
                 </li>
             </ul>
         </div>
-        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
+        <div class="author-subscribe" data-author="{{ author.id }}">
           <li class="list-group-item">
                 {% if recipe.author != request.user %}
                   <div class="card-user__footer">

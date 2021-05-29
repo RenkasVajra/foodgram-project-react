@@ -166,8 +166,8 @@ def new_recipe(request):
                 recipe=recipe,
                 ingredient=ingredient,
                 count=count
-                )
             )
+        )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect('index')
@@ -184,8 +184,8 @@ def recipe_edit(request, id):
             'formRecipe.html', {
                 'form': form,
                 'is_new': True,
-                },
-            )
+            },
+        )
     recipe = form.save(commit=False)
     recipe.user = request.user
     recipe.save()
@@ -198,8 +198,8 @@ def recipe_edit(request, id):
                 recipe=recipe,
                 ingredient=ingredient,
                 count=count
-                )
             )
+        )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect('index')
@@ -213,21 +213,21 @@ def profile(request, username):
         'author': author,
         'following': following,
         'page_obj': page_obj,
-        }
+    }
     return render(request, 'authorRecipe.html', context)
 
 
 def page_not_found(request, exception):
     return render(
         request,
-        "misc/404.html",
-        {"path": request.path},
+        'misc/404.html',
+        {'path': request.path},
         status=status.HTTP_404_NOT_FOUND
         )
 
 
 def server_error(request):
-    return render(request, "misc/500.html", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return render(request, 'misc/500.html', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def shopping_list_download(request):
@@ -243,7 +243,7 @@ def shopping_list(request):
         request,
         'shopList.html',
         {'shopping_list': shopping_list},
-        )
+    )
 
 
 def shopping_list_ingredients(request):
@@ -251,8 +251,10 @@ def shopping_list_ingredients(request):
     ingredients = shopping_list.order_by('ingredient__title').values(
         'ingredient__title',
         'ingredient__unit'
-    ).annotate(total_count=Sum('recipe__count'))
+        ).annotate(total_count=Sum('recipe__count'))
     download = []
     for ingredient in ingredients:
-        download.append(f'{ingredient["ingredient__title"]} - {ingredient["total_count"]}{ingredient["ingredient__unit"]} \n')
+        download.append(f'{ingredient["ingredient__title"]} '
+                        f'- {ingredient["total_count"]}'
+                        f'{ingredient["ingredient__unit"]} \n')
     return download
