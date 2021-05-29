@@ -1,21 +1,11 @@
-<!doctype html>
+{% extends "base.html" %}
 {% load static %}
-{% load user_filters  %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Создание рецепта</title>
+{% load user_filters %}
+{% block content %}
+    <title>{% block title %}Создание рецепта{% endblock %} </title>
     <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 </head>
 <body class="body">
-<header class="header">
-    <nav class="nav">
-        {% include 'includes/navbar_auth.html' %}
-    </nav>
-</header>
 <main class="main container">
     <div class="main__header">
         <h1 class="main__title">Создание рецепта</h1>
@@ -88,23 +78,10 @@
             </div>
         </form>
     </div>
-
-
 </main>
-<footer class="footer">
-
-    <div class="footer__container container">
-        <a href="#" class="footer__brand link">Продуктовый помощник</a>
-        <ul class="footer__items">
-            <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-            <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-        </ul>
-    </div>
-</footer>
 <script src="{% static 'js/config/config.js' %}"></script>
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="{% static 'js/utils/debouncing.js' %}"></script>
 <script src="{% static 'js/api/Api.js' %}"></script>
 <script src="{% static 'formRecipe.js' %}"></script>
-</body>
-</html>
+{% endblock %}

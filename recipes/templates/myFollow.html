@@ -1,18 +1,11 @@
-<!doctype html>
-<html lang="en">
+{% extends "base.html" %}
 {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Мои подписки</title>
+
+{% block content %}
+    <title>{% block title %}Мои подписки{% endblock %} </title>
     <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 </head>
 <body class="body">
-    <header class="header">
-        {% include 'includes/navbar.html' %}
-    </header>
     <main class="main container">
         <div class="main__header">
             <h1 class="main__title">Мои подписки</h1>
@@ -82,5 +75,4 @@
     <script src="{% static 'js/components/Header.js' %}"></script>
     <script src="{% static 'js/api/Api.js' %}"></script>
     <script src="{% static 'myFollow.js' %}"></script>
-</body>
-</html>
+{% endblock %}

@@ -1,23 +1,12 @@
-<!doctype html>
+{% extends "base.html" %}
 {% load static %}
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Рецепты</title>
+
+{% block content %}
+    <title>{% block title %}Рецепты{% endblock %} </title>
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
     {{ follow.author.recipes.all }}
 </head>
 <body class="body">
-  <header class="header">
-      <nav class="nav">
-          <div class="nav__container container">
-              {% include 'includes/navbar.html' %}
-          </div>
-      </nav>
-  </header>
     <main class="main container">
         <div class="main__header">
             <h1 class="main__title">{{ author.username }}</h1>
@@ -49,8 +38,6 @@
                 {% endif %}
            </li>
         </div>
-            </div>
-        </div>
         <div class="card-list">
             {% for recipe in page_obj %}
                 {% include 'includes/recipe_card.html' with recipe=recipe %}
@@ -64,15 +51,6 @@
             </ul>
         </nav>
     </main>
-    <footer class="footer">
-        <div class="footer__container container">
-            <a href="#" class="footer__brand link">Продуктовый помощник</a>
-            <ul class="footer__items">
-                <li class="footer__item"><a href="#" class="footer__link link">Об авторе </a></li>
-                <li class="footer__item"><a href="#" class="footer__link link">Технологии</a></li>
-            </ul>
-        </div>
-    </footer>
 	<script src="{% static 'js/components/Purchases.js' %}"></script>
 	<script src="{% static 'js/components/Favorites.js' %}"></script>
 	<script src="{% static 'js/components/Subscribe.js' %}"></script>
@@ -82,5 +60,4 @@
 	<script src="{% static 'js/components/Header.js' %}"></script>
 	<script src="{% static 'js/api/Api.js' %}"></script>
 	<script src="{% static 'authorRecipe.js' %}"></script>
-</body>
-</html>
+{% endblock %}

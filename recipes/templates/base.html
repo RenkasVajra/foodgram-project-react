@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %} Заголовок страницы {% endblock %} | FoodGram</title>
+    {%block static_css %} {% endblock %}
+    {% include 'includes/navbar.html' %}
+</head>
+
+<body class="body">
+    <main class="main container">
+        {% block content %}{% endblock content %}
+    </main>
+
+    {% include 'includes/footer.html' %}
+
+    {% block static_js %}
+
+    {% endblock %}
+</body>
+
+</html>

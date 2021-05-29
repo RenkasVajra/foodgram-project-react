@@ -21,3 +21,4 @@ djangorestframework-simplejwt==4.6.0
 django-cors-headers==3.6.0
 djangorestframework==3.11.0
 sorl-thumbnail
+gunicorn==20.0.4

@@ -10,9 +10,25 @@ from django.http import JsonResponse
 from django.db.models import Sum
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from rest_framework import status
 
-from .forms import RecipesForm, IngredientsForm, FollowForm, FavoriteRecipesForm, ShoppingListForm
-from .models import Recipe, Ingredient, Follow, FavoriteRecipes, ShoppingList, RecipeIngredient, User
+from .forms import (
+    RecipesForm,
+    IngredientsForm,
+    FollowForm,
+    FavoriteRecipesForm,
+    ShoppingListForm
+)
+from .models import (
+    Recipe,
+    Ingredient,
+    Follow,
+    FavoriteRecipes,
+    ShoppingList,
+    RecipeIngredient,
+    User
+)
+from foodgram import settings
 
 
 class IsFavoriteMixin:
@@ -24,14 +40,13 @@ class IsFavoriteMixin:
             .select_related('author')
             .with_is_favorite(user_id=self.request.user.id)
         )
-
         return qs
 
 
 class BaseRecipeListView(IsFavoriteMixin, ListView):
     context_object_name = 'recipe_list'
     queryset = Recipe.objects.all()
-    paginate_by = 6
+    paginate_by = settings.POSTS_PER_PAGE
     page_title = None
 
     def get_context_data(self, **kwargs):
@@ -41,13 +56,13 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
         return context
 
     def _get_page_title(self):
-        assert self.page_title, f"Attribute 'page_title' not set for {self.__class__.__name__}"  # noqa
         return self.page_title
 
     def _get_shopping_list(self):
         if self.request.user.is_authenticated:
             shopping_list = ShoppingList.objects.filter(user=self.request.user).all()
             return shopping_list
+        return redirect('index')
 
 
 class FavouriteView(LoginRequiredMixin, BaseRecipeListView):
@@ -66,8 +81,6 @@ class SubscriptionsView(LoginRequiredMixin, BaseRecipeListView):
     def get_queryset(self):
         user = self.request.user
         qs = user.following.all()
-        print(qs)
-
         return qs
 
 
@@ -83,7 +96,6 @@ class ProfileView(BaseRecipeListView):
     def get_queryset(self):
         qs = super().get_queryset()
         qs = qs.filter(user=self.user).with_is_favorite(user_id=self.user.id)
-
         return qs
 
     def get_page_title(self):
@@ -149,12 +161,13 @@ def new_recipe(request):
 
     for title, count in ingredients.items():
         ingredient = get_object_or_404(Ingredient, title=title)
-        objs.append(RecipeIngredient(
-            recipe=recipe,
-            ingredient=ingredient,
-            count=count
-        )
-        )
+        objs.append(
+            RecipeIngredient(
+                recipe=recipe,
+                ingredient=ingredient,
+                count=count
+                )
+            )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect('index')
@@ -168,11 +181,11 @@ def recipe_edit(request, id):
     if not form.is_valid():
         return render(
             request,
-            'formRecipe.html',
-            {'form': form,
-             'is_new': True,
-             },
-        )
+            'formRecipe.html', {
+                'form': form,
+                'is_new': True,
+                },
+            )
     recipe = form.save(commit=False)
     recipe.user = request.user
     recipe.save()
@@ -180,12 +193,13 @@ def recipe_edit(request, id):
     objs = []
     for title, count in ingredients.items():
         ingredient = get_object_or_404(Ingredient, title=title)
-        objs.append(RecipeIngredient(
-            recipe=recipe,
-            ingredient=ingredient,
-            count=count
-        )
-        )
+        objs.append(
+            RecipeIngredient(
+                recipe=recipe,
+                ingredient=ingredient,
+                count=count
+                )
+            )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect('index')
@@ -199,7 +213,7 @@ def profile(request, username):
         'author': author,
         'following': following,
         'page_obj': page_obj,
-    }
+        }
     return render(request, 'authorRecipe.html', context)
 
 
@@ -208,12 +222,12 @@ def page_not_found(request, exception):
         request,
         "misc/404.html",
         {"path": request.path},
-        status=404
-    )
+        status=status.HTTP_404_NOT_FOUND
+        )
 
 
 def server_error(request):
-    return render(request, "misc/500.html", status=500)
+    return render(request, "misc/500.html", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def shopping_list_download(request):
@@ -228,22 +242,17 @@ def shopping_list(request):
     return render(
         request,
         'shopList.html',
-        {'shopping_list': shopping_list,},
-    )
+        {'shopping_list': shopping_list},
+        )
 
 
 def shopping_list_ingredients(request):
-    shopping_list = ShoppingList.objects.filter(user=request.user).all()
-    ingredients = {}
-    for item in shopping_list:
-        for x in item.recipe.recipe.all():
-            name = f'{x.ingredient.title} ({x.ingredient.unit})'
-            units = x.count
-            if name in ingredients.keys():
-                ingredients[name] += units
-            else:
-                ingredients[name] = units
+    shopping_list = Recipe.objects.filter(shopping_list__user=request.user)
+    ingredients = shopping_list.order_by('ingredient__title').values(
+        'ingredient__title',
+        'ingredient__unit'
+    ).annotate(total_count=Sum('recipe__count'))
     download = []
-    for key, units in ingredients.items():
-        download.append(f'{key} - {units} \n')
+    for ingredient in ingredients:
+        download.append(f'{ingredient["ingredient__title"]} - {ingredient["total_count"]}{ingredient["ingredient__unit"]} \n')
     return download

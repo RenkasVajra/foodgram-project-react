@@ -41,15 +41,23 @@
                 <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                     <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
-                    <button class="button button_style_light-blue" name="purchases" data-out><span
-                        class="icon-plus button__icon"></span>Добавить в покупки</button>
+
                 </div>
                 <ul class="single-card__items">
                     {% if user.is_authenticated %}
+                        <li class="single-card__item"><button class="button button_style_blue" name="purchases" data-out>
+                            <span class="icon-plus"></span> Добавить в покупки</button></li>
                     {% if recipe.author == request.user %}
                        <li class="single-card__item"> <a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}"
                                 class="single-card__text">Редактировать рецепт</a></li>
                     {% endif %}
+                    {% endif %}
+                    {% if recipe.author != request.user %}
+                    {% if following %}
+                        <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
+                        {% else %}
+                        <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 <div class="single-card__section">
@@ -68,15 +76,6 @@
                 </div>
             </div>
         </div>
-        {% if recipe.author != request.user %}
-            <div class="card-user__footer">
-                {% if following %}
-                    <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
-                {% else %}
-                    <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
-                {% endif %}
-            </div>
-        {% endif %}
     </main>
     <footer class="footer">
         <div class="footer__container container">

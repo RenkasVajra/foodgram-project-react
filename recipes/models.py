@@ -14,6 +14,10 @@ class Ingredient(models.Model):
     def __str__(self):
         return f'{self.title}, {self.unit}'
 
+    class Meta:
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
+
 
 class RecipeQuerySet(models.QuerySet):
     def with_is_favorite(self, user_id: Optional[int]):
@@ -43,6 +47,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return f'{self.title}'
+
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
 
 
 class Recipe(models.Model):
@@ -77,15 +85,39 @@ class Recipe(models.Model):
 
     objects = RecipeQuerySet.as_manager()
 
+    def __str__(self):
+        return (f'{self.title}, '
+                f'{self.tags}, '
+                f'{self.text}, '
+                f'{self.cook_time}, '
+                f'{self.author}, '
+                f'{self.ingredient}, '
+                f'{self.pub_date}'
+                )
+
     class Meta:
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
         ordering = ('-pub_date',)
 
 
 class RecipeIngredient(models.Model):
 
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='recipe')
-    ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE, related_name='recipe_ing')
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='recipe'
+    )
+    ingredient = models.ForeignKey(
+        Ingredient,
+        on_delete=models.CASCADE,
+        related_name='recipe_ing'
+    )
     count = models.PositiveIntegerField()
+
+    class Meta:
+        verbose_name = 'Ингредиенты рецепта'
+        verbose_name_plural = 'Ингредиенты рецептов'
 
 
 class FavoriteRecipes(models.Model):
@@ -95,7 +127,6 @@ class FavoriteRecipes(models.Model):
         on_delete=models.CASCADE,
         related_name='favorite_recipe',
         verbose_name='Любимый рецепт'
-
     )
     user = models.ForeignKey(
         User,
@@ -108,24 +139,24 @@ class FavoriteRecipes(models.Model):
         return f'{self.favorite} - избранный рецепт у {self.user}'
 
     class Meta:
-        constraints = [
-            models.UniqueConstraint(
-                fields=('user', 'favorite'),
-                name='unique_favorite_recipe'
-            )
-        ]
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
+        models.UniqueConstraint(
+            fields=('user', 'favorite'),
+            name='unique_favorite_recipe'
+        )
 
 
 class ShoppingList(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="buyer",
+        related_name='buyer',
     )
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name="shopping_list",
+        related_name='shopping_list',
         verbose_name='Рецепт'
     )
 
@@ -149,9 +180,9 @@ class Follow(models.Model):
     )
 
     class Meta:
+        verbose_name = 'Подписки'
+        verbose_name_plural = 'Подписки'
         models.UniqueConstraint(
             fields=('author', 'user'),
             name='following_unique'
         )
-
-

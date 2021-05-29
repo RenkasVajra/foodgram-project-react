@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'api'
 ]
 
+POSTS_PER_PAGE = 6
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
