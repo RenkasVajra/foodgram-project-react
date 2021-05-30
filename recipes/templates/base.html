@@ -3,23 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %} Заголовок страницы {% endblock %} | FoodGram</title>
     {%block static_css %} {% endblock %}
     {% include 'includes/navbar.html' %}
 </head>
 
 <body class="body">
-    <main class="main container">
-        {% block content %}{% endblock content %}
-    </main>
+<main class="main container">
+    {% block content %}
+    <div class="main__header">
+        <h1 class="main__title">Заголовок страницы </h1>
+    </div>
+    {% endblock content %}
+</main>
+{% include 'includes/footer.html' %}
 
-    {% include 'includes/footer.html' %}
+{% block static_js %}
 
-    {% block static_js %}
-
-    {% endblock %}
+{% endblock %}
 </body>
-
 </html>

@@ -1,78 +1,82 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-    <title>{% block title %}Мои подписки{% endblock %} </title>
-    <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
-</head>
+{% block static_css %}
+<link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+{% endblock %}
 <body class="body">
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">Мои подписки</h1>
+<div class="main__header">
+    <h1 class="main__title">Редактирование рецепта</h1>
+</div>
+<div class="card-list">
+    {% for follow in user.follower.all %}
+    <div class="card-user" data-author="{{ follow.author.id }}">
+        <div class="card-user__header">
+            <h2 class="card-user__title">{{ follow.author }}</h2>
         </div>
-        <div class="card-list">
-            {% for follow in user.follower.all %}
-            <div class="card-user" data-author="{{ follow.author.id }}">
-                <div class="card-user__header">
-                    <h2 class="card-user__title">{{ follow.author }}</h2>
-                </div>
-                <div class="card-user__body">
-                    <ul class="card-user__items">
-                        {% for recipe in follow.author.recipes.all|slice:"3" %}
-                        <li class="card-user__item">
-                            <div class="recipe">
-                                    {% load thumbnail %}
-                                        {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
-                                        <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
-                                    {% endthumbnail %}
-                                <h3 class="recipe__title">{{ recipe.title }}</h3>
-                                <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.
-                                </p>
-                            </div>
-                            {% endfor %}
-                        </li>
-                        <li class="card-user__item">
-                            <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">
-                                {% if follow.author.recipes.all|length == 0 %}
-                                    У пользователя нет рецептов.
-                                {% elif follow.author.recipes.all|length <= 3 %}
-                                    <p></p>
-                                {% elif follow.author.recipes.all|length|add:'-3' == 1 %}
-                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецепт...
-                                {% elif follow.author.recipes.all|length|add:'-3' < 5 %}
-                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептa...
-                                {% else %}
-                                    Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептов...
-                                {% endif %}
-                            </a>
-                        </li>
-                    </ul>
-            </div>
-                {% if recipe.author != request.user %}
-                    <div class="card-user__footer">
-                        {% if following %}
-                            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
-                        {% else %}
-                            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
-                        {% endif %}
+        <div class="card-user__body">
+            <ul class="card-user__items">
+                {% for recipe in follow.author.recipes.all|slice:"3" %}
+                <li class="card-user__item">
+                    <div class="recipe">
+                        {% load thumbnail %}
+                        {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
+                        <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}"
+                                                                                                  alt="{{ recipe.title }}"
+                                                                                                  class="card__image"></a>
+                        {% endthumbnail %}
+                        <h3 class="recipe__title">{{ recipe.title }}</h3>
+                        <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.
+                        </p>
                     </div>
-                {% endif %}
-            </div>
-            {% endfor %}
-        </div>
-        <nav class="pagination" aria-label="Search results pages">
-            <ul class="pagination__container">
-                {% if page_obj.has_other_pages %}
-                    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
-                {% endif %}
+                    {% endfor %}
+                </li>
+                <li class="card-user__item">
+                    <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">
+                        {% if follow.author.recipes.all|length == 0 %}
+                        У пользователя нет рецептов.
+                        {% elif follow.author.recipes.all|length <= 3 %}
+                        <p></p>
+                        {% elif follow.author.recipes.all|length|add:'-3' == 1 %}
+                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецепт...
+                        {% elif follow.author.recipes.all|length|add:'-3' < 5 %}
+                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептa...
+                        {% else %}
+                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептов...
+                        {% endif %}
+                    </a>
+                </li>
             </ul>
-        </nav>
-    </main>
-    <script src="{% static 'js/config/config.js' %}"></script>
-    <script src="{% static 'js/components/MainCards.js' %}"></script>
-    <script src="{% static 'js/components/MyFollow.js' %}"></script>
-    <script src="{% static 'js/components/Subscribe.js' %}"></script>
-    <script src="{% static 'js/components/Header.js' %}"></script>
-    <script src="{% static 'js/api/Api.js' %}"></script>
-    <script src="{% static 'myFollow.js' %}"></script>
+        </div>
+        {% if recipe.author != request.user %}
+        <div class="card-user__footer">
+            {% if following %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
+            </button>
+            {% else %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на
+                автора
+            </button>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+<nav class="pagination" aria-label="Search results pages">
+    <ul class="pagination__container">
+        {% if page_obj.has_other_pages %}
+        {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+        {% endif %}
+    </ul>
+</nav>
+{% endblock %}
+{% block static_js %}
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/MyFollow.js' %}"></script>
+<script src="{% static 'js/components/Subscribe.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'myFollow.js' %}"></script>
 {% endblock %}

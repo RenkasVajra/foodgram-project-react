@@ -1,37 +1,42 @@
 {% extends "base.html" %}
 {% load static %}
-
 {% block content %}
-    <title>{% block title %} Список покупок {% endblock %} </title>
-    <link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% block static_css %}
+<link rel="stylesheet" href="{% static 'pages/shopList.css' %}">
+{% endblock %}
 <body class="body">
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">Список покупок</h1>
-        </div>
-        <div class="card-list card-list_column">
-            <ul class="shopping-list">
-                {% for item in shopping_list %}
-                <li class="shopping-list__item" data-id="111">
-                    <div class="recipe recipe_reverse">
-                            {% load thumbnail %}
-                                {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
-                                <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
-                            {% endthumbnail %}
-                        <h3 class="recipe__title"> {{ item.recipe.title }}</h3>
-                        <p class="recipe__text"><span class="icon-time"></span> {{ item.recipe.time_cooking }} мин.</p>
-                    </div>
-                    <a data-confirm="Are you sure?" method="delete" href="{% url 'delete_purchase' item.recipe.id %}"
-                        rel="{% url 'delete_purchase' item.recipe.id %}" class="shopping-list__button link">Удалить</a>
-                </li>
-                {% endfor %}
-                {% if shopping_list %}
-                <a href="{% url 'download_shoplist' %}"><button class="button button_style_blue">
-                        Скачать список</button></a>
-                {% endif %}
-            </ul>
-        </div>
-    </main>
+<div class="main__header">
+    <h1 class="main__title">Список покупок</h1>
+</div>
+<div class="card-list card-list_column">
+    <ul class="shopping-list">
+        {% for item in shopping_list %}
+        <li class="shopping-list__item" data-id="111">
+            <div class="recipe recipe_reverse">
+                {% load thumbnail %}
+                {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
+                <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}"
+                                                                                          alt="{{ recipe.title }}"
+                                                                                          class="card__image"></a>
+                {% endthumbnail %}
+                <h3 class="recipe__title"> {{ item.recipe.title }}</h3>
+                <p class="recipe__text"><span class="icon-time"></span> {{ item.recipe.time_cooking }} мин.</p>
+            </div>
+            <a data-confirm="Are you sure?" method="delete" href="{% url 'delete_purchase' item.recipe.id %}"
+               rel="{% url 'delete_purchase' item.recipe.id %}" class="shopping-list__button link">Удалить</a>
+        </li>
+        {% endfor %}
+        {% if shopping_list %}
+        <a href="{% url 'download_shoplist' %}">
+            <button class="button button_style_blue">
+                Скачать список
+            </button>
+        </a>
+        {% endif %}
+    </ul>
+</div>
+{% endblock %}
+{% block static_js %}
 <script src="{% static 'js/config/config.js' %}"></script>
 <script src="{% static 'js/components/Header.js' %}"></script>
 <script src="{% static 'js/components/ShopList.js' %}"></script>

@@ -6,10 +6,10 @@ from recipes.models import Ingredient, FavoriteRecipes
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
-        fields = ('title', 'unit')
+        fields = ("title", "unit")
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         model = FavoriteRecipes
-        fields = '__all__'
+        fields = "__all__"

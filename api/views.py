@@ -1,130 +1,123 @@
 from rest_framework import status, mixins
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from django.shortcuts import get_object_or_404, render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
+from rest_framework.permissions import IsAuthenticated
 
-from recipes.models import FavoriteRecipes, Ingredient, Recipe, Follow, User, ShoppingList
+from recipes.models import (
+    FavoriteRecipes,
+    Ingredient,
+    Recipe,
+    Follow,
+    User,
+    ShoppingList,
+)
 from .serializers import IngredientSerializer, FavoriteSerializer
 
 
 class AddSubscriptions(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request, format=None):
-        if self.request.user.is_authenticated:
-            Follow.objects.get_or_create(
-                user=request.user,
-                author_id=request.data['id'],
-            )
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        return redirect('login')
+        Follow.objects.get_or_create(
+            user=request.user,
+            author_id=request.data.get("id"),
+        )
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class RemoveSubscriptions(APIView):
     def delete(self, request, pk, format=None):
         if self.request.user.is_authenticated:
-            get_object_or_404(
+            follow_obj = get_object_or_404(
                 Follow,
                 user=request.user,
-                author_id=pk
-            )
-            Follow.objects.filter(
-                author_id=pk,
-                user=request.user
-            ).delete()
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        return redirect('login')
+                author_id=pk)
+            follow_obj.delete()
+            return Response({"success": True}, status=status.HTTP_200_OK)
+        return redirect("login")
 
 
 class AddToFavorites(APIView):
     serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if self.request.user.is_authenticated:
-            FavoriteRecipes.objects.get_or_create(
-                user=request.user,
-                favorite_id=int(request.data['id']),
-            )
-
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        return redirect('login')
+        FavoriteRecipes.objects.get_or_create(
+            user=request.user,
+            favorite_id=int(request.data["id"]),
+        )
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class RemoveFromFavorites(APIView):
     serializer_class = FavoriteSerializer
+    permission_classes = [IsAuthenticated]
 
     def delete(self, request, id):
-        if self.request.user.is_authenticated:
-            get_object_or_404(
-                FavoriteRecipes,
-                user=request.user,
-                favorite_id=id
-            )
-            FavoriteRecipes.objects.filter(
-                favorite_id=id,
-                user=request.user
-            ).delete()
-
-            return Response({'success': True}, status=status.HTTP_200_OK)
-        return redirect('login')
+        favorite_recipe = get_object_or_404(
+            FavoriteRecipes, user=request.user, favorite_id=id
+        )
+        favorite_recipe.delete()
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class PurchaseView(APIView):
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        if self.request.user.is_authenticated:
-            recipe_id = request.data.get('id')
-            recipe = get_object_or_404(Recipe, id=recipe_id)
-            ShoppingList.objects.get_or_create(user=request.user, recipe=recipe)
-            return Response({'success': True})
-        return redirect('login')
+        recipe_id = request.data.get("id")
+        recipe = get_object_or_404(Recipe, id=recipe_id)
+        ShoppingList.objects.get_or_create(user=request.user, recipe=recipe)
+        return Response({"success": True})
 
 
-@login_required
+@permission_classes([IsAuthenticated])
 def remove_purchase(request, pk):
     if request.user.is_authenticated:
-        purchase = get_object_or_404(ShoppingList, user=request.user, recipe=pk)
+        purchase = get_object_or_404(
+            ShoppingList,
+            user=request.user,
+            recipe=pk
+        )
         purchase.delete()
-        return redirect('shopping_list')
-    return redirect('login')
+        return redirect("shopping_list")
+    return redirect("login")
 
 
 class GetIngredient(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = IngredientSerializer
+    permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        query = request.GET.get('query')
+        query = request.GET.get("query")
         queryset = list(
-            Ingredient.objects.filter(title__startswith=query).values(
-                'title',
-                'unit'
-            )
+            Ingredient.objects.filter(
+                title__startswith=query
+            ).values("title", "unit")
         )
         return JsonResponse(queryset, safe=False)
 
 
-@api_view(['POST'])
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def add_to_favorites(request):
-    if request.user.is_authenticated:
-        user = request.user
-        recipe_id = request.data.get('id')
-        FavoriteRecipes.objects.get_or_create(
-            user=user,
-            recipe_id=recipe_id,
-        )
-
-        return Response(status=status.HTTP_200_OK)
-    return redirect('login')
-
-
-@api_view(['DELETE'])
-def delete_from_favorites(request, pk, format=None):
-    get_object_or_404(
-        Follow,
-        pk=pk
+    user = request.user
+    recipe_id = request.data.get("id")
+    FavoriteRecipes.objects.get_or_create(
+        user=user,
+        recipe_id=recipe_id,
     )
-    FavoriteRecipes.objects.filter(pk=pk).delete()
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(["DELETE"])
+def delete_from_favorites(request, pk, format=None):
+    favorite_recipe = get_object_or_404(FavoriteRecipes, pk=pk)
+    favorite_recipe.delete()
 
     return Response(status=status.HTTP_200_OK)

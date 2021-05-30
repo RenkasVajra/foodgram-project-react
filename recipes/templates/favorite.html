@@ -1,44 +1,37 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load tag_filter %}
 {% block content %}
-    <title>{% block title %} Избранное {% endblock %} </title>
-    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
-</head>
+{% block static_css %}
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
 <body class="body">
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">Избранное</h1>
-            <ul class="tags">
-                <li class="tags__item">
-                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
-                    <span class="tags__label">Завтрак</span>
-                </li>
-                <li class="tags__item">
-                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
-                    <span for="lunch" class="tags__label">Обед</span>
-                </li>
-                <li class="tags__item">
-                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
-                    <label for="dinner" class="tags__label">Ужин</label>
-                </li>
-            </ul>
+<div class="main__header">
+    <h1 class="main__title">Избранное</h1>
+</div>
+<ul class="tags">
+    {% with active_tags=request.GET|get_tags %}
+    {% for tag in all_tags|all_tags %}
+    <li class="tags__item">
+        <a id="tag.display_name"
+           class="tags__checkbox tags__checkbox_style_{{tag.color}} {% if tag.display_name in active_tags %}tags__checkbox_active{% endif %}"
+           href="?{{ request|tag_link:tag }}"></a>
+        <span class="tags__label">{{ tag.title }}</span>
+    </li>
+    {% endfor %}
+    {% endwith %}
+</ul>
+<div class="card-list">
+    {% for recipe in page_obj %}
+    {% include 'includes/recipe_card.html' with recipe=recipe %}
+    {% endfor %}
+</div>
+{% if page_obj.has_other_pages %}
+{% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+{% endif %}
 
-        </div>
-        <div class="card-list">
-            {% for recipe in page_obj %}
-                {% include 'includes/recipe_card.html' with recipe=recipe %}
-            {% endfor %}
-        </div>
-        <nav class="pagination" aria-label="Search results pages">
-            <ul class="pagination__container">
-                {% if page_obj.has_other_pages %}
-                    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
-                {% endif %}
-            </ul>
-        </nav>
-    </main>
-
+{% endblock %}
+{% block static_js %}
 <script src="{% static 'js/components/MainCards.js' %}"></script>
 
 <script src="{% static 'js/components/Purchases.js' %}"></script>

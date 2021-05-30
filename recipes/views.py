@@ -17,7 +17,7 @@ from .forms import (
     IngredientsForm,
     FollowForm,
     FavoriteRecipesForm,
-    ShoppingListForm
+    ShoppingListForm,
 )
 from .models import (
     Recipe,
@@ -26,32 +26,32 @@ from .models import (
     FavoriteRecipes,
     ShoppingList,
     RecipeIngredient,
-    User
+    User,
+    Tag,
 )
 from foodgram import settings
 
 
 class IsFavoriteMixin:
-
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = (
-            qs
-            .select_related('author')
-            .with_is_favorite(user_id=self.request.user.id)
-        )
+        qs = qs.select_related("author").with_is_favorite(user_id=self.request.user.id)
         return qs
 
 
 class BaseRecipeListView(IsFavoriteMixin, ListView):
-    context_object_name = 'recipe_list'
+    context_object_name = "recipe_list"
     queryset = Recipe.objects.all()
     paginate_by = settings.POSTS_PER_PAGE
     page_title = None
 
     def get_context_data(self, **kwargs):
-        kwargs.update({'page_title': self._get_page_title(),
-                       'shopping_list': self._get_shopping_list()})
+        kwargs.update(
+            {
+                "page_title": self._get_page_title(),
+                "shopping_list": self._get_shopping_list(),
+            }
+        )
         context = super().get_context_data(**kwargs)
         return context
 
@@ -62,12 +62,20 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
         if self.request.user.is_authenticated:
             shopping_list = ShoppingList.objects.filter(user=self.request.user).all()
             return shopping_list
-        return redirect('index')
+        return redirect("index")
+
+    def get_queryset(self):
+
+        qs = super().get_queryset()
+        tags = self.request.GET.getlist("tag")
+        if tags:
+            qs = qs.filter(tags__display_name__in=tags).distinct()
+        return qs
 
 
 class FavouriteView(LoginRequiredMixin, BaseRecipeListView):
-    page_title = 'Избранное'
-    template_name = 'index.html'
+    page_title = "Избранное"
+    template_name = "index.html"
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -75,36 +83,38 @@ class FavouriteView(LoginRequiredMixin, BaseRecipeListView):
 
 
 class SubscriptionsView(LoginRequiredMixin, BaseRecipeListView):
-    page_title = 'Подписки'
-    template_name = 'myFollow.html'
+    page_title = "Подписки"
+    template_name = "myFollow.html"
 
     def get_queryset(self):
-        user = self.request.user
-        qs = user.following.all()
-        return qs
+        return self.request.user.following.all()
 
 
 class ProfileView(BaseRecipeListView):
 
-    template_name = 'profile.html'
+    template_name = "authorRecipe.html"
 
     def get(self, request, *args, **kwargs):
-        self.user = get_object_or_404(User, username=kwargs.get('username'))
-
+        self.user = get_object_or_404(User, username=kwargs.get("username"))
         return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.filter(user=self.user).with_is_favorite(user_id=self.user.id)
+        qs = qs.filter(author=self.user)
         return qs
 
-    def get_page_title(self):
+    def get_context_data(self, **kwargs):
+        kwargs.update({"author": self.user})
+        context = super().get_context_data(**kwargs)
+        return context
+
+    def _get_page_title(self):
         return self.user.get_full_name()
 
 
 class RecipeDetailView(DetailView):
     queryset = Recipe.objects.all()
-    template_name = 'recipePage.html'
+    template_name = "recipePage.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -113,28 +123,32 @@ class RecipeDetailView(DetailView):
 
 
 class FavoriteView(LoginRequiredMixin, BaseRecipeListView):
-    page_title = 'Избранное'
-    template_name = 'favorite.html'
+    page_title = "Избранное"
+    template_name = "favorite.html"
 
     def get_queryset(self):
         qs = super().get_queryset()
         user = self.request.user
-        qs = qs.filter(favorite_recipe__user=self.request.user).with_is_favorite(user_id=user.id)
+        qs = qs.filter(
+            favorite_recipe__user=self.request.user
+        ).with_is_favorite(
+            user_id=user.id
+        )
         return qs
 
 
 class IndexView(BaseRecipeListView):
-    page_title = 'Recipes'
-    template_name = 'index.html'
+    page_title = "Recipes"
+    template_name = "index.html"
 
 
 def get_ingredients(request):
     ingredients = {}
     for key in request.POST:
-        if key.startswith('nameIngredient'):
+        if key.startswith("nameIngredient"):
             value_ingredient = key[15:]
             ingredients[request.POST[key]] = request.POST[
-                'valueIngredient_' + value_ingredient
+                "valueIngredient_" + value_ingredient
             ]
     return ingredients
 
@@ -146,10 +160,11 @@ def new_recipe(request):
     if not form.is_valid():
         return render(
             request,
-            'formRecipe.html',
-            {'form': form,
-             'is_new': True,
-             },
+            "formRecipe.html",
+            {
+                "form": form,
+                "is_new": True,
+            },
         )
 
     recipe = form.save(commit=False)
@@ -170,20 +185,25 @@ def new_recipe(request):
         )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
-    return redirect('index')
+    return redirect("index")
 
 
 @login_required
 def recipe_edit(request, id):
     recipe_base = get_object_or_404(Recipe, pk=id)
-    form = RecipesForm(request.POST or None, files=request.FILES or None, instance=recipe_base)
+    form = RecipesForm(
+        request.POST or None,
+        files=request.FILES or None,
+        instance=recipe_base
+    )
     ingredients = get_ingredients(request)
     if not form.is_valid():
         return render(
             request,
-            'formRecipe.html', {
-                'form': form,
-                'is_new': True,
+            "formRecipe.html",
+            {
+                "form": form,
+                "is_new": True,
             },
         )
     recipe = form.save(commit=False)
@@ -202,38 +222,30 @@ def recipe_edit(request, id):
         )
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
-    return redirect('index')
-
-
-def profile(request, username):
-    author = get_object_or_404(User, username=username)
-    page_obj = author.recipes.all()
-    following = request.user.follower.filter(author=author).exists()
-    context = {
-        'author': author,
-        'following': following,
-        'page_obj': page_obj,
-    }
-    return render(request, 'authorRecipe.html', context)
+    return redirect("index")
 
 
 def page_not_found(request, exception):
     return render(
         request,
-        'misc/404.html',
-        {'path': request.path},
-        status=status.HTTP_404_NOT_FOUND
-        )
+        "misc/404.html",
+        {"path": request.path},
+        status=status.HTTP_404_NOT_FOUND,
+    )
 
 
 def server_error(request):
-    return render(request, 'misc/500.html', status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return render(
+        request,
+        "misc/500.html",
+        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+    )
 
 
 def shopping_list_download(request):
     result = shopping_list_ingredients(request)
-    response = HttpResponse(result, content_type='text/plain')
-    response['Content-Disposition'] = 'attachment; filename = download.txt'
+    response = HttpResponse(result, content_type="text/plain")
+    response["Content-Disposition"] = "attachment; filename = download.txt"
     return response
 
 
@@ -241,20 +253,23 @@ def shopping_list(request):
     shopping_list = ShoppingList.objects.filter(user=request.user).all()
     return render(
         request,
-        'shopList.html',
-        {'shopping_list': shopping_list},
+        "shopList.html",
+        {"shopping_list": shopping_list},
     )
 
 
 def shopping_list_ingredients(request):
     shopping_list = Recipe.objects.filter(shopping_list__user=request.user)
-    ingredients = shopping_list.order_by('ingredient__title').values(
-        'ingredient__title',
-        'ingredient__unit'
-        ).annotate(total_count=Sum('recipe__count'))
+    ingredients = (
+        shopping_list.order_by("ingredient__title")
+        .values("ingredient__title", "ingredient__unit")
+        .annotate(total_count=Sum("recipe__count"))
+    )
     download = []
     for ingredient in ingredients:
-        download.append(f'{ingredient["ingredient__title"]} '
-                        f'- {ingredient["total_count"]}'
-                        f'{ingredient["ingredient__unit"]} \n')
+        download.append(
+            f'{ingredient["ingredient__title"]} '
+            f'- {ingredient["total_count"]}'
+            f'{ingredient["ingredient__unit"]} \n'
+        )
     return download

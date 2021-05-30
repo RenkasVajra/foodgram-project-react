@@ -1,11 +1,14 @@
+{% load tag_filter %}
 <nav class="pagination" aria-label="Search results pages">
     <ul class="pagination__container">
         {% if items.has_previous %}
             <li class="pagination__item">
-                <a class="pagination__link link" href="?page={{ items.previous_page_number }}"><span class="icon-left"></span></a>
+                {% with previous_item=items.previous_page_number %}
+                    <a class="pagination__link link" href="?{{ request|pagination:previous_item }}"><span class="icon-left"></span></a>
+                {% endwith %}
             </li>
             <li class="pagination__item">
-                <a class="pagination__link link" href="?page=1&{{ currently_selected_tags_query }}">1</a>
+                <a class="pagination__link link" href="?{{ request|pagination:1 }}">1</a>
             </li>
 
             {% if items.number > 2 %}
@@ -14,31 +17,38 @@
                 {% endif %}
 
                 <li class="pagination__item">
-                    <a class="pagination__link link" href="?page={{ page_obj.number|add:'-1' }}">{{ page_obj.number|add:'-1' }}</a>
+                    {% with previous=page_obj.number|add:'-1' %}
+                        <a class="pagination__link link" href="?{{ request|pagination:previous }}">{{ page_obj.number|add:'-1' }}</a>
+                    {% endwith %}
                 </li>
             {% endif %}
         {% endif %}
 
         <li class="pagination__item pagination__item_active">
-            <a class="pagination__link link" href="#">{{ page_obj.number }}</a>
+            <a class="pagination__link link" href="{{ request|pagination:page_obj.number }}">{{ page_obj.number }}</a>
         </li>
 
         {% if items.has_next %}
             {% if items.number|add:'1' < page_obj.paginator.num_pages %}
                 <li class="pagination__item">
-                    <a class="pagination__link link" href="?page={{ page_obj.number|add:'1' }}">{{ page_obj.number|add:'1' }}</a>
+                    {% with next=page_obj.number|add:'1' %}
+                        <a class="pagination__link link" href="?{{ request|pagination:next }}">{{ page_obj.number|add:'1' }}</a>
+                    {% endwith %}
                 </li>
-
                 {% if items.number|add:'2' < page_obj.paginator.num_pages %}
                     <li class="pagination__item">...</li>
                 {% endif %}
             {% endif %}
 
             <li class="pagination__item">
-                <a class="pagination__link link" href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+                {% with obj=page_obj.paginator.num_pages %}
+                    <a class="pagination__link link" href="?{{ request|pagination:obj }}">{{ page_obj.paginator.num_pages }}</a>
+                {% endwith %}
             </li>
             <li class="pagination__item">
-                <a class="pagination__link link" href="?page={{ items.next_page_number }}"><span class="icon-right"></span></a>
+                {% with next_item=items.next_page_number %}
+                    <a class="pagination__link link" href="?{{ request|pagination:next_item }}"><span class="icon-right"></span></a>
+                {% endwith %}
             </li>
         {% endif %}
     </ul>

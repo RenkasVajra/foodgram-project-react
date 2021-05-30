@@ -1,63 +1,58 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% load tag_filter %}
 {% block content %}
-    <title>{% block title %}Рецепты{% endblock %} </title>
-    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
-    {{ follow.author.recipes.all }}
-</head>
-<body class="body">
-    <main class="main container">
-        <div class="main__header">
-            <h1 class="main__title">{{ author.username }}</h1>
-            <ul class="tags">
-                <li class="tags__item">
-                    <a id="breakfast" class="tags__checkbox tags__checkbox_style_orange tags__checkbox_active" href="#"></a>
-                    <span class="tags__label">Завтрак</span>
-                </li>
-                <li class="tags__item">
-                    <a id="lunch" class="tags__checkbox tags__checkbox_style_green tags__checkbox_active" href="#"></a>
-                    <span for="lunch" class="tags__label">Обед</span>
-                </li>
-                <li class="tags__item">
-                    <a id="dinner" class="tags__checkbox tags__checkbox_style_purple tags__checkbox_active" href="#"></a>
-                    <label for="dinner" class="tags__label">Ужин</label>
-                </li>
-            </ul>
+<title>{% block title %}Рецепты{% endblock %} </title>
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{{ follow.author.recipes.all }}
+<h1 class="main__title">{{ author.username }}</h1>
+<ul class="tags">
+    {% with active_tags=request.GET|get_tags %}
+    {% for tag in all_tags|all_tags %}
+    <li class="tags__item">
+        <a id="tag.display_name"
+           class="tags__checkbox tags__checkbox_style_{{tag.color}} {% if tag.display_name in active_tags %}tags__checkbox_active{% endif %}"
+           href="?{{ request|tag_link:tag }}"></a>
+        <span class="tags__label">{{ tag.title }}</span>
+    </li>
+    {% endfor %}
+    {% endwith %}
+</ul>
+<div class="author-subscribe" data-author="{{ author.id }}">
+    <li class="list-group-item">
+        {% if recipe.author != request.user %}
+        <div class="card-user__footer">
+            {% if following %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
+            </button>
+            {% else %}
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на
+                автора
+            </button>
+            {% endif %}
         </div>
-        <div class="author-subscribe" data-author="{{ author.id }}">
-          <li class="list-group-item">
-                {% if recipe.author != request.user %}
-                  <div class="card-user__footer">
-                      {% if following %}
-                      <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора</button>
-                      {% else %}
-                      <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
-                      {% endif %}
-                  </div>
-                {% endif %}
-           </li>
-        </div>
-        <div class="card-list">
-            {% for recipe in page_obj %}
-                {% include 'includes/recipe_card.html' with recipe=recipe %}
-            {% endfor %}
-        </div>
-        <nav class="pagination" aria-label="Search results pages">
-            <ul class="pagination__container">
-                {% if page_obj.has_other_pages %}
-                    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
-                {% endif %}
-            </ul>
-        </nav>
-    </main>
-	<script src="{% static 'js/components/Purchases.js' %}"></script>
-	<script src="{% static 'js/components/Favorites.js' %}"></script>
-	<script src="{% static 'js/components/Subscribe.js' %}"></script>
-	<script src="{% static 'js/config/config.js' %}"></script>
-	<script src="{% static 'js/components/MainCards.js' %}"></script>
-	<script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
-	<script src="{% static 'js/components/Header.js' %}"></script>
-	<script src="{% static 'js/api/Api.js' %}"></script>
-	<script src="{% static 'authorRecipe.js' %}"></script>
+        {% endif %}
+    </li>
+</div>
+<div class="card-list">
+    {% for recipe in page_obj %}
+    {% include 'includes/recipe_card.html' with recipe=recipe %}
+    {% endfor %}
+</div>
+
+{% if page_obj.has_other_pages %}
+{% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+{% endif %}
+
+{% endblock %}
+{% block static_js %}
+<script src="{% static 'js/components/Purchases.js' %}"></script>
+<script src="{% static 'js/components/Favorites.js' %}"></script>
+<script src="{% static 'js/components/Subscribe.js' %}"></script>
+<script src="{% static 'js/config/config.js' %}"></script>
+<script src="{% static 'js/components/MainCards.js' %}"></script>
+<script src="{% static 'js/components/AuthorRecipe.js' %}"></script>
+<script src="{% static 'js/components/Header.js' %}"></script>
+<script src="{% static 'js/api/Api.js' %}"></script>
+<script src="{% static 'authorRecipe.js' %}"></script>
 {% endblock %}

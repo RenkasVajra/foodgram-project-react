@@ -1,33 +1,44 @@
 from django.contrib import admin
 
-from .models import Ingredient, Recipe, RecipeIngredient, Follow, ShoppingList, FavoriteRecipes, Tag
+from .models import (
+    Ingredient,
+    Recipe,
+    RecipeIngredient,
+    Follow,
+    ShoppingList,
+    FavoriteRecipes,
+    Tag,
+)
 
 
 class TagAdmin(admin.ModelAdmin):
     model = Tag
-    list_display = ('title',)
+    list_display = ("title",)
 
 
 class FavoriteRecpiesInline(admin.TabularInline):
     model = FavoriteRecipes
     extra = 1
-    raw_id_fields = ('favorite',)
+    raw_id_fields = ("favorite",)
 
 
 class MembershipInline(admin.TabularInline):
     model = RecipeIngredient
     extra = 1
-    raw_id_fields = ('ingredient',)
+    raw_id_fields = ("ingredient",)
 
 
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = (MembershipInline, FavoriteRecpiesInline,)
-    list_filter = ('author', 'title', 'tags')
+    inlines = (
+        MembershipInline,
+        FavoriteRecpiesInline,
+    )
+    list_filter = ("author", "title", "tags")
 
 
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('title', 'unit')
-    list_filter = ('title',)
+    list_display = ("title", "unit")
+    list_filter = ("title",)
 
 
 admin.site.register(Tag, TagAdmin)

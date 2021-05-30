@@ -25,8 +25,8 @@
                 </ul>
             {% endif %}
             {% if user.is_authenticated %}
-                <p2><a><span class="badge badge_style_blue">Привет, {{ request.user }}!</span></a></p2>
+                <p2><span class="badge badge_style_blue">Привет, {{ request.user }}!</span></p2>
             {% else %}
-                <p2><a><span class="badge badge_style_blue">Привет, Друг!!</span></a></p2>
+                <p2><span class="badge badge_style_blue">Привет, Друг!!</span></p2>
             {% endif %}
         </div>
