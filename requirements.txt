@@ -1,4 +1,4 @@
-asgiref==3.2.7            # via django
+asgiref==3.2.10           # via django
 certifi==2020.4.5.1       # via requests
 chardet==3.0.4            # via requests
 django==3.0.5             # via -r djangorestframework
@@ -17,8 +17,8 @@ gunicorn==20.0.4
 pillow
 psycopg2-binary
 django-simple-email-confirmation==0.70
-djangorestframework-simplejwt==4.6.0
 djangorestframework==3.11.0
 sorl-thumbnail
 django-environ
 python-dotenv
+PyJWT==1.7.1

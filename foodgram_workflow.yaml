@@ -1,4 +1,4 @@
-name: yambd_final workflow
+name: foodgram workflow
 
 on: [push]
 
