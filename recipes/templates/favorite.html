@@ -5,29 +5,28 @@
 {% block static_css %}
 <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
-<body class="body">
 <div class="main__header">
     <h1 class="main__title">Избранное</h1>
 </div>
 <ul class="tags">
     {% with active_tags=request.GET|get_tags %}
     {% for tag in all_tags|all_tags %}
-    <li class="tags__item">
-        <a id="tag.display_name"
-           class="tags__checkbox tags__checkbox_style_{{tag.color}} {% if tag.display_name in active_tags %}tags__checkbox_active{% endif %}"
-           href="?{{ request|tag_link:tag }}"></a>
-        <span class="tags__label">{{ tag.title }}</span>
-    </li>
+        <li class="tags__item">
+            <a id="tag.display_name"
+               class="tags__checkbox tags__checkbox_style_{{tag.color}} {% if tag.display_name in active_tags %}tags__checkbox_active{% endif %}"
+               href="?{{ request|tag_link:tag }}">
+            </a><span class="tags__label">{{ tag.title }}</span>
+        </li>
     {% endfor %}
     {% endwith %}
 </ul>
 <div class="card-list">
     {% for recipe in page_obj %}
-    {% include 'includes/recipe_card.html' with recipe=recipe %}
+        {% include 'includes/recipe_card.html' with recipe=recipe %}
     {% endfor %}
 </div>
 {% if page_obj.has_other_pages %}
-{% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+    {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
 {% endif %}
 
 {% endblock %}

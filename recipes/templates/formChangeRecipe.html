@@ -4,7 +4,6 @@
 {% block static_css %}
 <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock %}
-<body class="body">
 <div class="main__header">
     <h1 class="main__title">Редактирование рецепта</h1>
 </div>
@@ -21,21 +20,13 @@
             <p class="form__label">Теги</p>
             <div class="form__field-group">
                 <div class="tags">
-                    <div class="tags__item">
-                        <input type="checkbox" name="breakfast" id="id_breakfast"
-                               class="tags__checkbox tags__checkbox_style_orange">
-                        <label for="id_breakfast" class="tags__label">Завтрак</label>
-                    </div>
-                    <div class="tags__item">
-                        <input type="checkbox" name="lunch" id="id_lunch"
-                               class="tags__checkbox tags__checkbox_style_green" checked>
-                        <label for="id_lunch" class="tags__label">Обед</label>
-                    </div>
-                    <div class="tags__item">
-                        <input type="checkbox" name="dinner" id="id_dinner"
-                               class="tags__checkbox tags__checkbox_style_purple" checked>
-                        <label for="id_dinner" class="tags__label">Ужин</label>
-                    </div>
+                    {% for tag in form.fields.tags.choices.queryset %}
+                        <div class="tags__item">
+                            <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.title }}"
+                               class="tags__checkbox tags__checkbox_style_{{ tag.color }}" checked>
+                            <label for="id_tags_{{ tag.id }}" class="tags__label">{{ tag.title }}</label>
+                        </div>
+                    {% endfor %}
                 </div>
                 <span class="form__error"></span>
             </div>

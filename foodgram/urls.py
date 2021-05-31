@@ -27,9 +27,9 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/", include("api.urls")),
     path("", include("recipes.urls")),
+    path("about/", include("django.contrib.flatpages.urls")),
     path("auth/", include("users.urls")),
     path("auth/", include("django.contrib.auth.urls")),
-    path("about/", include("django.contrib.flatpages.urls")),
 ]
 
 urlpatterns += [

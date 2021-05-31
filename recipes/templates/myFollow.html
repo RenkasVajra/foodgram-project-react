@@ -4,20 +4,19 @@
 {% block static_css %}
 <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 {% endblock %}
-<body class="body">
 <div class="main__header">
     <h1 class="main__title">Редактирование рецепта</h1>
 </div>
 <div class="card-list">
     {% for follow in user.follower.all %}
-    <div class="card-user" data-author="{{ follow.author.id }}">
-        <div class="card-user__header">
-            <h2 class="card-user__title">{{ follow.author }}</h2>
-        </div>
-        <div class="card-user__body">
-            <ul class="card-user__items">
+        <div class="card-user" data-author="{{ follow.author.id }}">
+            <div class="card-user__header">
+                <h2 class="card-user__title">{{ follow.author }}</h2>
+            </div>
+            <div class="card-user__body">
+                <ul class="card-user__items">
                 {% for recipe in follow.author.recipes.all|slice:"3" %}
-                <li class="card-user__item">
+                    <li class="card-user__item">
                     <div class="recipe">
                         {% load thumbnail %}
                         {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
@@ -29,34 +28,34 @@
                         <p class="recipe__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.
                         </p>
                     </div>
-                    {% endfor %}
-                </li>
+                {% endfor %}
+                    </li>
                 <li class="card-user__item">
                     <a href="{% url 'profile' follow.author.username %}" class="card-user__link link">
                         {% if follow.author.recipes.all|length == 0 %}
-                        У пользователя нет рецептов.
+                            У пользователя нет рецептов.
                         {% elif follow.author.recipes.all|length <= 3 %}
-                        <p></p>
+                            <p></p>
                         {% elif follow.author.recipes.all|length|add:'-3' == 1 %}
-                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецепт...
+                            Еще {{ follow.author.recipes.all|length|add:'-3' }} рецепт...
                         {% elif follow.author.recipes.all|length|add:'-3' < 5 %}
-                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептa...
+                            Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептa...
                         {% else %}
-                        Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептов...
+                            Еще {{ follow.author.recipes.all|length|add:'-3' }} рецептов...
                         {% endif %}
                     </a>
                 </li>
             </ul>
         </div>
         {% if recipe.author != request.user %}
-        <div class="card-user__footer">
+            <div class="card-user__footer">
             {% if following %}
-            <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
-            </button>
+                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
+                </button>
             {% else %}
-            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на
-                автора
-            </button>
+                <button class="button button_style_light-blue button_size_auto" name="subscribe"
+                        data-out>Подписаться на автора
+                </button>
             {% endif %}
         </div>
         {% endif %}
@@ -66,7 +65,7 @@
 <nav class="pagination" aria-label="Search results pages">
     <ul class="pagination__container">
         {% if page_obj.has_other_pages %}
-        {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
+            {% include 'includes/paginator.html' with items=page_obj paginator=paginator %}
         {% endif %}
     </ul>
 </nav>

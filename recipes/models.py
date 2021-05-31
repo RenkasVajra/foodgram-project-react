@@ -105,7 +105,7 @@ class Recipe(models.Model):
         ordering = ("-pub_date",)
 
     def __str__(self):
-        return f"{self.title}"
+        return {self.title}
 
 
 class RecipeIngredient(models.Model):
@@ -123,6 +123,9 @@ class RecipeIngredient(models.Model):
     class Meta:
         verbose_name = "Ингредиенты рецепта"
         verbose_name_plural = "Ингредиенты рецептов"
+
+    def __str__(self):
+        return f"{self.recipe}, {self.ingredient}, {self.count}"
 
 
 class FavoriteRecipes(models.Model):
@@ -169,6 +172,9 @@ class ShoppingList(models.Model):
     class Meta:
         verbose_name = "Список покупок"
         verbose_name_plural = "Список покупок"
+
+    def __str__(self):
+        return f"{self.user}, {self.recipe}"
 
 
 class Follow(models.Model):

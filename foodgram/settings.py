@@ -29,6 +29,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
+SITE_ID = 1
+
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
@@ -95,13 +97,9 @@ WSGI_APPLICATION = "foodgram.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": str(os.path.join(BASE_DIR, "db.sqlite3")),
     }
 }
 

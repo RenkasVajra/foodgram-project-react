@@ -20,7 +20,7 @@ from .serializers import IngredientSerializer, FavoriteSerializer
 
 
 class AddSubscriptions(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request, format=None):
         Follow.objects.get_or_create(
@@ -31,32 +31,32 @@ class AddSubscriptions(APIView):
 
 
 class RemoveSubscriptions(APIView):
+    permission_classes = (IsAuthenticated,)
+
     def delete(self, request, pk, format=None):
-        if self.request.user.is_authenticated:
-            follow_obj = get_object_or_404(
-                Follow,
-                user=request.user,
-                author_id=pk)
-            follow_obj.delete()
-            return Response({"success": True}, status=status.HTTP_200_OK)
-        return redirect("login")
+        follow_obj = get_object_or_404(
+            Follow,
+            user=request.user,
+            author_id=pk)
+        follow_obj.delete()
+        return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class AddToFavorites(APIView):
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         FavoriteRecipes.objects.get_or_create(
             user=request.user,
-            favorite_id=int(request.data["id"]),
+            favorite_id=request.data.get("id"),
         )
         return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class RemoveFromFavorites(APIView):
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def delete(self, request, id):
         favorite_recipe = get_object_or_404(
@@ -67,7 +67,7 @@ class RemoveFromFavorites(APIView):
 
 
 class PurchaseView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def post(self, request):
         recipe_id = request.data.get("id")
@@ -78,20 +78,18 @@ class PurchaseView(APIView):
 
 @permission_classes([IsAuthenticated])
 def remove_purchase(request, pk):
-    if request.user.is_authenticated:
-        purchase = get_object_or_404(
-            ShoppingList,
-            user=request.user,
-            recipe=pk
-        )
-        purchase.delete()
-        return redirect("shopping_list")
-    return redirect("login")
+    purchase = get_object_or_404(
+        ShoppingList,
+        user=request.user,
+        recipe=pk
+    )
+    purchase.delete()
+    return redirect("shopping_list")
 
 
 class GetIngredient(viewsets.GenericViewSet, mixins.ListModelMixin):
     serializer_class = IngredientSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get(self, request):
         query = request.GET.get("query")
