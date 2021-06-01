@@ -62,7 +62,6 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
         if self.request.user.is_authenticated:
             shopping_list = ShoppingList.objects.filter(user=self.request.user).all()
             return shopping_list
-        return redirect("index")
 
     def get_queryset(self):
 
