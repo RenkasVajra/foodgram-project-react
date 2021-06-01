@@ -59,6 +59,7 @@ jobs:
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
+          envs: ENV_FILE
           script: |
             cd foodgram_project/
             echo $ENV_FILE |tr ' ' '\n' > .env
