@@ -22,7 +22,7 @@ jobs:
           pip install -r requirements.txt
 
       - name: Lint with flake8
-        run: flake8 .
+        run: flake8 . --exclude api/migrations,recipes/migrations,users/migrations,foodgram/settings.py
 
 
   build_and_push_to_docker_hub:
