@@ -52,13 +52,15 @@ jobs:
     steps:
       - name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
+        env:
+          ENV_FILE: ${{ secrets.ENV_FILE }}
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USER }}
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd foodgram_deploy/
+            cd foodgram_project/
             echo $ENV_FILE |tr ' ' '\n' > .env
             sudo docker pull renkasvajra/foodgram:v1.4.1
             if [ -n "$(sudo docker ps -a -q)" ]; then
@@ -79,13 +81,3 @@ jobs:
           to: ${{ secrets.TELEGRAM_TO }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: ${{ github.workflow }} успешно выполнен!
-
-  flake8:
-    runs-on: ubuntu-latest
-    name: job for flake8
-    steps:
-      - name: Install dependencies
-        run: |
-          pip install flake8 pytest
-      - name: Lint with flake8
-        run: flake8 .
