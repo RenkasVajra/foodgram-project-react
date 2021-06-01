@@ -58,7 +58,7 @@ class Tag(models.Model):
         verbose_name_plural = "Теги"
 
     def __str__(self):
-        return f"{self.title}"
+        return {self.title}
 
 
 class Recipe(models.Model):
@@ -105,7 +105,7 @@ class Recipe(models.Model):
         ordering = ("-pub_date",)
 
     def __str__(self):
-        return {self.title}
+        return f"{self.title}"
 
 
 class RecipeIngredient(models.Model):
