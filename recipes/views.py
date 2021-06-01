@@ -249,11 +249,9 @@ def shopping_list(request):
 
 def shopping_list_ingredients(request):
     shopping_list = Recipe.objects.filter(shopping_list__user=request.user)
-    ingredients = (
-        shopping_list.order_by("ingredient__title")
-            .values("ingredient__title", "ingredient__unit")
-            .annotate(total_count=Sum("recipe__count"))
-    )
+    ingredients = shopping_list.order_by("ingredient__title").values(
+        "ingredient__title", "ingredient__unit").annotate(
+        total_count=Sum("recipe__count"))
     download = []
     for ingredient in ingredients:
         download.append(
