@@ -58,7 +58,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           rm: true
-          source: .
+          source: "ingredients.csv,docker-compose.yml,nginx/default.conf"
           target: "foodgram-project"
 
       - name: executing remote ssh commands to deploy
