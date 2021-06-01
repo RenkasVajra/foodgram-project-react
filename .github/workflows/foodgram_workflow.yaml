@@ -61,7 +61,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           envs: ENV_FILE
           script: |
-            cd foodgram_project/
+            cd foodgram-project/
             echo $ENV_FILE |tr ' ' '\n' > .env
             sudo docker pull renkasvajra/foodgram:v1.4.1
             if [ -n "$(sudo docker ps -a -q)" ]; then
