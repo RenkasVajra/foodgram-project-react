@@ -1,41 +1,31 @@
-from django.http import HttpResponse
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.contrib.auth import get_user_model
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models import Sum
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
-from django.http import JsonResponse
-from django.db.models import Sum
-from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 from rest_framework import status
 
+from foodgram import settings
 from .forms import (
     RecipesForm,
-    IngredientsForm,
-    FollowForm,
-    FavoriteRecipesForm,
-    ShoppingListForm,
 )
 from .models import (
     Recipe,
     Ingredient,
-    Follow,
-    FavoriteRecipes,
     ShoppingList,
     RecipeIngredient,
     User,
-    Tag,
 )
-from foodgram import settings
 
 
 class IsFavoriteMixin:
     def get_queryset(self):
         qs = super().get_queryset()
-        qs = qs.select_related("author").with_is_favorite(user_id=self.request.user.id)
+        qs = qs.select_related("author").with_is_favorite(
+            user_id=self.request.user.id)
         return qs
 
 
@@ -60,7 +50,8 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
 
     def _get_shopping_list(self):
         if self.request.user.is_authenticated:
-            shopping_list = ShoppingList.objects.filter(user=self.request.user).all()
+            shopping_list = ShoppingList.objects.filter(
+                user=self.request.user).all()
             return shopping_list
 
     def get_queryset(self):
@@ -90,7 +81,6 @@ class SubscriptionsView(LoginRequiredMixin, BaseRecipeListView):
 
 
 class ProfileView(BaseRecipeListView):
-
     template_name = "authorRecipe.html"
 
     def get(self, request, *args, **kwargs):
@@ -148,7 +138,7 @@ def get_ingredients(request):
             value_ingredient = key[15:]
             ingredients[request.POST[key]] = request.POST[
                 "valueIngredient_" + value_ingredient
-            ]
+                ]
     return ingredients
 
 
@@ -261,8 +251,8 @@ def shopping_list_ingredients(request):
     shopping_list = Recipe.objects.filter(shopping_list__user=request.user)
     ingredients = (
         shopping_list.order_by("ingredient__title")
-        .values("ingredient__title", "ingredient__unit")
-        .annotate(total_count=Sum("recipe__count"))
+            .values("ingredient__title", "ingredient__unit")
+            .annotate(total_count=Sum("recipe__count"))
     )
     download = []
     for ingredient in ingredients:

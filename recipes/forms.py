@@ -1,7 +1,7 @@
-from django.forms import ModelForm
 from django import forms
+from django.forms import ModelForm
 
-from .models import Recipe, Ingredient, Follow, FavoriteRecipes, ShoppingList, Tag
+from .models import Recipe, Ingredient, Follow, FavoriteRecipes, ShoppingList
 
 
 class RecipesForm(ModelForm):
