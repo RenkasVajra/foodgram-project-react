@@ -12,7 +12,7 @@ services:
       - ./.env
 
   web:
-    image: renkasvajra/foodgram:v1.0
+    image: renkasvajra/foodgram:v1.4.1
     restart: always
     volumes:
       - static_files:/code/static

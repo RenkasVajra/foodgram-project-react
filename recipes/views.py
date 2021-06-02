@@ -1,11 +1,8 @@
 from django.contrib.auth.decorators import login_required
-<<<<<<< HEAD
 from django.core.paginator import Paginator
-=======
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import HttpResponse
->>>>>>> dc69247a90d1629b1120e9ec0c0c0d66c51aba3a
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from django.views.generic.detail import DetailView

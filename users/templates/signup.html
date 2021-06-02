@@ -14,14 +14,16 @@
             {% csrf_token %}
             {% for field in form %}
                 <div class="form__group">
-                  <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
-                <div class="form__field-group">
-                    {{ field|add_class:'form__input' }}
-                    {% if field.errors %}
-                      <span class="form__error">{{ field.errors.as_text|escape }}</span>
-                    {% endif %}
+                    <label for="{{ field.id_for_label }}" class="form__label">{{ field.label }}</label>
+                    <div class="form__field-group">
+                      {{ field|add_class:'form__input' }}
+                      {% if form.password.errors %}
+                        {% for error in form.password.errors %}
+                            <span class="form__error">{{ error|escape }}</span>
+                        {% endfor %}
+                      {% endif %}
+                    </div>
                 </div>
-            </div>
             {% endfor %}
             <div class="form__footer">
                 <button class="button button_style_blue">Создать аккаунт</button>
