@@ -22,8 +22,8 @@
                 <label for="id_password" class="form__label">Пароль</label>
                 <div class="form__field-group">
                     <input type="password" name="password" id="id_password" class="form__input">
-                    {% if field.errors %}
-                        <span class="form__error">{{ field.errors.as_text|escape }}</span>
+                    {% if form.errors %}
+                        <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.</span>
                     {% endif %}
                 </div>
             </div>
