@@ -32,6 +32,7 @@
             </div>
         </div>
         <div class="form__group">
+            {% for ingredient in form.instance.ingredients.all %}
             <label for="nameIngredient" class="form__label">Ингредиенты</label>
             <div class="form__field-group">
                 <div class="form__field-group-ingredientes">
@@ -47,6 +48,7 @@
                 <span class="form__ingredient-link" id="addIng">Добавить ингредиент</span>
                 <span class="form__error"></span>
             </div>
+            {% endfor %}
         </div>
         <div class="form__group">
             <label for="id_time" class="form__label">Время приготовления</label>
