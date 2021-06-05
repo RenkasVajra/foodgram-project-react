@@ -42,6 +42,7 @@ APPEND_SLASH = False
 # Application definition
 
 INSTALLED_APPS = [
+    "users",
     "django.contrib.sites",
     "django.contrib.flatpages",
     "django.contrib.admin",
@@ -57,7 +58,6 @@ INSTALLED_APPS = [
     "sorl.thumbnail",
     "corsheaders",
     "recipes",
-    "users",
     "api",
 ]
 
@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "ru"
 
 TIME_ZONE = "UTC"
 
@@ -157,7 +157,12 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 LOGIN_URL = "/auth/login"
+
 LOGIN_REDIRECT_URL = "index"
+
+LOGOUT_REDIRECT_URL = "index"
+
+PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 

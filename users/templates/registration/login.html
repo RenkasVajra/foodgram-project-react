@@ -5,10 +5,9 @@
 {% endblock %}
 {% block content %}
 {% load user_filters %}
-<main class="main container">
-    <div class="main__header">
-        <h1 class="main__title">Войти на сайт</h1>
-    </div>
+<div class="main__header">
+    <h1 class="main__title">Войти на сайт</h1>
+</div>
     <div class="form-container">
         <form class="form" action="{% url 'login' %}" method="post">
             {% csrf_token %}
@@ -23,7 +22,7 @@
                 <div class="form__field-group">
                     <input type="password" name="password" id="id_password" class="form__input">
                     {% if form.errors %}
-                        <span class="form__error">Имя пользователя и пароль не совпадают. Введите правильные данные.</span>
+                        <span class="form__error">Вы ввели некорректные данныее. Повторите попытку снова</span>
                     {% endif %}
                 </div>
             </div>
@@ -33,5 +32,4 @@
             </div>
         </form>
     </div>
-</main>
 {% endblock %}

@@ -20,9 +20,9 @@
                 {% if user.is_authenticated %}
                     <div class="single-card__favorite">
                         <button class="button button_style_none" name="favorites" data-out><span
-                            class="icon-favorite icon-favorite_big"></span></button>
-                    <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
-                </div>
+                                class="icon-favorite icon-favorite_big"></span></button>
+                        <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
+                    </div>
                 {% endif %}
             </div>
             <ul class="card__items">
@@ -37,11 +37,11 @@
             </div>
             <ul class="single-card__items">
                 {% if user.is_authenticated %}
-                    <li class="single-card__item">
-                        <button class="button button_style_blue" name="purchases" data-out>
-                            <span class="icon-plus"></span> Добавить в покупки
-                        </button>
-                    </li>
+                <li class="single-card__item">
+                    <button class="button button_style_blue" name="purchases" data-out>
+                        <span class="icon-plus"></span> Добавить в покупки
+                    </button>
+                </li>
                 {% if recipe.author == request.user %}
                     <li class="single-card__item"><a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}"
                                                  class="single-card__text">Редактировать рецепт</a></li>
@@ -75,9 +75,9 @@
 
     <script src="{% static 'js/api/Api.js' %}"></script>
     {% if user.is_authenticated %}
-        <script src="{% static 'js/components/Favorites.js' %}"></script>
-        <script src="{% static 'js/components/Subscribe.js' %}"></script>
-        <script src="{% static 'singlePage.js' %}"></script>
+    <script src="{% static 'js/components/Favorites.js' %}"></script>
+    <script src="{% static 'js/components/Subscribe.js' %}"></script>
+    <script src="{% static 'singlePage.js' %}"></script>
     {% else %}
     <script src="{% static 'singlePageNotAuth.js' %}"></script>
     {% endif %}

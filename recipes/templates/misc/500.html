@@ -2,14 +2,18 @@
 {% block title %} Ошибка 500 {% endblock %}
 {% block content %}
 
-<main role="main" class="container">
 <div class="row">
-    <div class="col-md-12">
-        <h1>Ошибка 500</h1>
-        <p class="lead">Ошибка на сервере, попробуйте обновить страницу или обратиться позже</p>
-        <p class="lead"><a href="{% url 'index' %}">Вернуться на главную</a></p>
+    <form action="{% url 'index' %}">
+  <div class="main__header">
+    <h1 class="main__title">Ошибка 500</h1>
+  </div>
+  <div class="custom-center-block">
+    <p class="custom-text-block">Ошибка на сервере, попробуйте обновить страницу или обратиться позже</p>
+    <div class="custom-button-block">
+      <button class="button button_style_blue">Перейти на главную</button>
     </div>
+  </div>
+</form>
 </div>
-</main>
 
 {% endblock %}
