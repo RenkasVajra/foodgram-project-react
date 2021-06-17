@@ -1,18 +1,19 @@
 {% extends "base.html" %}
 {% load static %}
+{% load user_filters %}
 {% block content %}
 {% block static_css %}
 <link rel="stylesheet" href="{% static 'pages/form.css' %}">
 {% endblock %}
 <div class="main__header">
-    <h1 class="main__title">Редактирование рецепта</h1>
+    <h1 class="main__title">Создание рецепта</h1>
 </div>
 <div class="form-container">
-    <form class="form">
+    <form class="form" method="post" enctype="multipart/form-data">{% csrf_token %}
         <div class="form__group">
             <label for="id_name" class="form__label">Название рецепта</label>
             <div class="form__field-group">
-                <input type="text" id="id_name" name="name" class="form__input">
+                {{ form.title|addclass:'form__input' }}
                 <span class="form__error"></span>
             </div>
         </div>
@@ -51,7 +52,7 @@
         <div class="form__group">
             <label for="id_time" class="form__label">Время приготовления</label>
             <div class="form__field-group form__field-group_time">
-                <input type="text" id="id_time" name="name" class="form__input">
+                {{ form.cook_time|addclass:'form__input' }}
                 <label for="id_time" class="form__label">минут</label>
                 <span class="form__error"></span>
             </div>
@@ -59,15 +60,14 @@
         <div class="form__group">
             <label for="id_description" class="form__label">Описание</label>
             <div class="form__field-group">
-                <textarea name="description" id="id_description" rows="8" class="form__textarea"></textarea>
+                {{ form.text|addclass:'form__input' }}
                 <span class="form__error"></span>
             </div>
         </div>
         <div class="form__group">
             <span class="form__label">Загрузить фото</span>
             <div class="form__field-group">
-                <label for="id_file" class="form__file-button">Выбрать файл</label>
-                <input type="file" class="form__file" name="file" id="id_file">
+                {{ form.image|addclass:'form__input' }}
                 <span class="form__error"></span>
             </div>
         </div>

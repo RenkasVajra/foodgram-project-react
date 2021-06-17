@@ -1,6 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 {% load tag_filter %}
+{% load button_filter %}
 {% block content %}
 <title>{% block title %}Рецепты{% endblock %} </title>
 <link rel="stylesheet" href="{% static 'pages/index.css' %}">
@@ -22,19 +23,21 @@
     {% endwith %}
 </ul>
 <div class="author-subscribe" data-author="{{ author.id }}">
-    <li class="list-group-item">
-        {% if recipe.author != request.user %}
-            <div class="card-user__footer">
-            {% if following %}
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
+    {% if request.user != profile.author %}
+        {% if recipe.author|is_following:request.user %}
+            <li class="single-card__item">
+                <button class="button button_style_light-blue button_size_auto" name="subscribe">
+                    Отписаться от автора
                 </button>
-            {% else %}
-                <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>Подписаться на автора
+            </li>
+        {% else %}
+            <li class="single-card__item">
+                <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
+                    Подписаться на автора
                 </button>
-            {% endif %}
-        </div>
+            </li>
         {% endif %}
-    </li>
+    {% endif %}
 </div>
 <div class="card-list">
     {% for recipe in page_obj %}

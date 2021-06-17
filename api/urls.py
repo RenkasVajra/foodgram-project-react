@@ -1,7 +1,6 @@
 from django.urls import path
 
 from . import views
-from .views import AddSubscriptions, RemoveSubscriptions
 
 urlpatterns = [
     path(
@@ -11,23 +10,28 @@ urlpatterns = [
     ),
     path(
         "v1/favorites/",
-        views.AddToFavorites.as_view()
+        views.AddToFavorites.as_view(),
+        name="add_favorite"
     ),
     path(
         "v1/favorites/<int:id>/",
-        views.RemoveFromFavorites.as_view()
+        views.RemoveFromFavorites.as_view(),
+        name="remove_favorite"
     ),
     path(
         "v1/subscriptions/",
-        AddSubscriptions.as_view()
+        views.AddSubscriptions.as_view(),
+        name="add_subscribe"
     ),
     path(
         "v1/subscriptions/<int:pk>/",
-        RemoveSubscriptions.as_view()
+        views.RemoveSubscriptions.as_view(),
+        name="remove_subscribe"
     ),
     path(
         "v1/purchases/",
-        views.PurchaseView.as_view()
+        views.PurchaseView.as_view(),
+        name="add_purchase"
     ),
     path(
         "v1/purchases/<int:pk>/",

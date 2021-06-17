@@ -74,6 +74,7 @@ class PurchaseView(APIView):
         return Response({"success": True})
 
 
+@api_view(["DELETE", "GET"])
 @permission_classes([IsAuthenticated])
 def remove_purchase(request, pk):
     purchase = get_object_or_404(
@@ -82,7 +83,7 @@ def remove_purchase(request, pk):
         recipe=pk
     )
     purchase.delete()
-    return redirect("shopping_list")
+    return Response({"success": True}, status=status.HTTP_200_OK)
 
 
 class GetIngredient(viewsets.GenericViewSet, mixins.ListModelMixin):

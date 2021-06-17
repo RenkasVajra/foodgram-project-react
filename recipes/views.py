@@ -40,7 +40,7 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
         kwargs.update(
             {
                 "page_title": self._get_page_title(),
-                "shopping_list": self._get_shopping_list(),
+                "shopping_card": self._get_shopping_list(),
             }
         )
         context = super().get_context_data(**kwargs)

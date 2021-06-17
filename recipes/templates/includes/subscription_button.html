@@ -1,0 +1,16 @@
+{% load button_filter %}
+{% if request.user != recipe.author %}
+    {% if recipe.author|is_following:request.user %}
+        <li class="single-card__item">
+            <button class="button button_style_light-blue button_size_auto" name="subscribe">
+                Отписаться от автора
+            </button>
+        </li>
+    {% else %}
+        <li class="single-card__item">
+            <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
+                Подписаться на автора
+            </button>
+        </li>
+    {% endif %}
+{% endif %}

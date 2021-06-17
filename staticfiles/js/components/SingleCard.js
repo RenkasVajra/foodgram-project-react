@@ -55,4 +55,3 @@ class SingleCard extends MainCards{
         }
     }
 }
-

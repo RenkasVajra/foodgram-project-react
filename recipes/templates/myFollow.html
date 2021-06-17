@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load button_filter %}
 {% block content %}
 {% block static_css %}
 <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
@@ -47,18 +48,9 @@
                 </li>
             </ul>
         </div>
-        {% if recipe.author != request.user %}
             <div class="card-user__footer">
-            {% if following %}
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться от автора
-                </button>
-            {% else %}
-                <button class="button button_style_light-blue button_size_auto" name="subscribe"
-                        data-out>Подписаться на автора
-                </button>
-            {% endif %}
+            {% include 'includes/subscription_button.html' %}
         </div>
-        {% endif %}
     </div>
     {% endfor %}
 </div>
