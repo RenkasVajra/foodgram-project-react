@@ -28,7 +28,8 @@
             </div>
             <ul class="card__items">
                 {% for tag in recipe.tags.all %}
-                    <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
+                    <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span>
+                    </li>
                 {% endfor %}
             </ul>
             <div class="single-card__items single-card__items_column">
@@ -39,10 +40,24 @@
             <ul class="single-card__items">
                 {% if user.is_authenticated %}
                     {% include 'includes/shopping_button.html' %}
-                    {% include 'includes/subscription_button.html' %}
+                    {% if not request.user == recipe.author %}
+                        {% if recipe.author|is_following:request.user %}
+                            <li class="single-card__item">
+                                <button class="button button_style_light-blue button_size_auto" name="subscribe">
+                                    Отписаться от автора
+                                </button>
+                            </li>
+                        {% else %}
+                              <li class="single-card__item">
+                                <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
+                                    Подписаться на автора
+                                </button>
+                              </li>
+                        {% endif %}
+                    {% endif %}
                     {% if recipe.author == request.user %}
                         <li class="single-card__item"><a style="margin-left: 2.5em" href="{% url 'recipe_edit' recipe.id %}"
-                                                     class="single-card__text">Редактировать рецепт</a></li>
+                                                         class="single-card__text">Редактировать рецепт</a></li>
                     {% endif %}
                 {% endif %}
             </ul>

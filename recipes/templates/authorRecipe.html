@@ -22,23 +22,25 @@
     {% endfor %}
     {% endwith %}
 </ul>
-<div class="author-subscribe" data-author="{{ author.id }}">
-    {% if request.user != profile.author %}
-        {% if recipe.author|is_following:request.user %}
-            <li class="single-card__item">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe">
-                    Отписаться от автора
-                </button>
-            </li>
-        {% else %}
-            <li class="single-card__item">
-                <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
-                    Подписаться на автора
-                </button>
-            </li>
-        {% endif %}
+{% if user.is_authenticated %}
+    {% if not request.user == recipe.author %}
+        <div class="author-subscribe" data-author="{{ author.id }}">
+            {% if author|is_following:request.user %}
+                <li class="single-card__item">
+                    <button class="button button_style_light-blue button_size_auto" name="subscribe">
+                        Отписаться от автора
+                    </button>
+                </li>
+            {% else %}
+                <li class="single-card__item">
+                    <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
+                        Подписаться на автора
+                    </button>
+                </li>
+        </div>
+            {% endif %}
     {% endif %}
-</div>
+{% endif %}
 <div class="card-list">
     {% for recipe in page_obj %}
         {% include 'includes/recipe_card.html' with recipe=recipe %}

@@ -6,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
 {% endblock %}
 <div class="main__header">
-    <h1 class="main__title">Редактирование рецепта</h1>
+    <h1 class="main__title">Мои подписки</h1>
 </div>
 <div class="card-list">
     {% for follow in user.follower.all %}
@@ -49,8 +49,26 @@
             </ul>
         </div>
             <div class="card-user__footer">
-            {% include 'includes/subscription_button.html' %}
-        </div>
+                {% if user.is_authenticated %}
+                    {% if not request.user == recipe.author %}
+                        <div class="author-subscribe" data-author="{{ follow.author.id }}">
+                            {% if follow.author|is_following:request.user %}
+                                <li class="single-card__item">
+                                    <button class="button button_style_light-blue button_size_auto" name="subscribe">
+                                        Отписаться от автора
+                                    </button>
+                                </li>
+                            {% else %}
+                                <li class="single-card__item">
+                                    <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
+                                        Подписаться на автора
+                                    </button>
+                                </li>
+                        </div>
+                            {% endif %}
+                    {% endif %}
+                {% endif %}
+            </div>
     </div>
     {% endfor %}
 </div>

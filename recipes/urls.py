@@ -16,6 +16,12 @@ urlpatterns = [
     ),
 
     path(
+        'recipes/delete/<int:id>/',
+        views.recipe_delete,
+        name='recipe_delete'
+    ),
+
+    path(
         "subscriptions/",
         views.SubscriptionsView.as_view(),
         name="subscriptions"

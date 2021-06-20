@@ -22,8 +22,7 @@
                 <h3 class="recipe__title"> {{ item.recipe.title }}</h3>
                 <p class="recipe__text"><span class="icon-time"></span> {{ item.recipe.time_cooking }} мин.</p>
             </div>
-            <a data-confirm="Are you sure?" method="delete" href="{% url 'delete_purchase' item.recipe.id %}"
-               rel="{% url 'delete_purchase' item.recipe.id %}" class="shopping-list__button link">Удалить</a>
+            <a href="" class="shopping-list__button link">Удалить</a>
         </li>
         {% endfor %}
         {% if shopping_list %}

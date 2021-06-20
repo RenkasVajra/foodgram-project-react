@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404
 from rest_framework import status, mixins
 from rest_framework import viewsets
 from rest_framework.decorators import api_view, permission_classes
@@ -100,21 +100,3 @@ class GetIngredient(viewsets.GenericViewSet, mixins.ListModelMixin):
         return JsonResponse(queryset, safe=False)
 
 
-@api_view(["POST"])
-@permission_classes([IsAuthenticated])
-def add_to_favorites(request):
-    user = request.user
-    recipe_id = request.data.get("id")
-    FavoriteRecipes.objects.get_or_create(
-        user=user,
-        recipe_id=recipe_id,
-    )
-    return Response(status=status.HTTP_200_OK)
-
-
-@api_view(["DELETE"])
-def delete_from_favorites(request, pk, format=None):
-    favorite_recipe = get_object_or_404(FavoriteRecipes, pk=pk)
-    favorite_recipe.delete()
-
-    return Response(status=status.HTTP_200_OK)

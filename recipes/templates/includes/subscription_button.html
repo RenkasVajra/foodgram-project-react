@@ -1,16 +1,18 @@
 {% load button_filter %}
 {% if request.user != recipe.author %}
+    <div class="author-subscribe" data-author="{{ author.id }}">
     {% if recipe.author|is_following:request.user %}
         <li class="single-card__item">
             <button class="button button_style_light-blue button_size_auto" name="subscribe">
-                Отписаться от автора
+                Отписаться
             </button>
         </li>
     {% else %}
         <li class="single-card__item">
             <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
-                Подписаться на автора
+                Подписаться
             </button>
         </li>
     {% endif %}
+    </div>
 {% endif %}

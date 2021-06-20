@@ -40,7 +40,7 @@ class BaseRecipeListView(IsFavoriteMixin, ListView):
         kwargs.update(
             {
                 "page_title": self._get_page_title(),
-                "shopping_card": self._get_shopping_list(),
+                "shopping_list": self._get_shopping_list(),
             }
         )
         context = super().get_context_data(**kwargs)
@@ -180,11 +180,11 @@ def new_recipe(request):
 
 @login_required
 def recipe_edit(request, id):
-    recipe_base = get_object_or_404(Recipe, pk=id)
+    recipe = get_object_or_404(Recipe, pk=id)
     form = RecipesForm(
         request.POST or None,
         files=request.FILES or None,
-        instance=recipe_base
+        instance=recipe
     )
     ingredients = get_ingredients(request)
     if not form.is_valid():
@@ -213,6 +213,13 @@ def recipe_edit(request, id):
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect("index")
+
+
+def recipe_delete(request, id):
+    recipe = get_object_or_404(Recipe, user=request.user, pk=id)
+    print(recipe)
+    recipe.delete()
+    return redirect('index')
 
 
 def page_not_found(request, exception):
