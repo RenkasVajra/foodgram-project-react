@@ -190,10 +190,10 @@ def recipe_edit(request, id):
     if not form.is_valid():
         return render(
             request,
-            "formRecipe.html",
+            "formChangeRecipe.html",
             {
                 "form": form,
-                "is_new": True,
+                "recipe": recipe
             },
         )
     recipe = form.save(commit=False)
@@ -216,8 +216,7 @@ def recipe_edit(request, id):
 
 
 def recipe_delete(request, id):
-    recipe = get_object_or_404(Recipe, user=request.user, pk=id)
-    print(recipe)
+    recipe = get_object_or_404(Recipe, author=request.user, pk=id)
     recipe.delete()
     return redirect('index')
 
