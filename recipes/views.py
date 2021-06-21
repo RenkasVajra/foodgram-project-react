@@ -8,6 +8,7 @@ from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from rest_framework import status
 
+from .validators import validate_ingredients
 from foodgram import settings
 from .forms import (
     RecipesForm,
@@ -172,7 +173,7 @@ def new_recipe(request):
                 count=count
             )
         )
-
+    validate_ingredients(request)
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect("index")
