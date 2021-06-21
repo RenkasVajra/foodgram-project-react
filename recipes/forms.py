@@ -7,7 +7,7 @@ from .models import Recipe, Ingredient, Follow, FavoriteRecipes, ShoppingList
 class RecipesForm(ModelForm):
     class Meta:
         model = Recipe
-        fields = ("title", "cook_time", "text", "image", "tags")
+        fields = ("title", "cook_time", "text", "image", "tags", "ingredient")
         labels = {
             "title": "Название",
             "text": "Текст",
@@ -17,6 +17,11 @@ class RecipesForm(ModelForm):
         }
 
         widgets = {"tags": forms.CheckboxSelectMultiple()}
+
+        ingredient = forms.ModelMultipleChoiceField(
+            queryset=Ingredient.objects.all(),
+            to_field_name="title"
+        )
 
 
 class IngredientsForm(ModelForm):
