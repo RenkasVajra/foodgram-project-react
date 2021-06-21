@@ -1,4 +1,3 @@
-from .models import Recipe
 from .forms import RecipesForm
 from .views import get_ingredients
 
