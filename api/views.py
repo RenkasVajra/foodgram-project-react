@@ -98,5 +98,3 @@ class GetIngredient(viewsets.GenericViewSet, mixins.ListModelMixin):
             ).values("title", "unit")
         )
         return JsonResponse(queryset, safe=False)
-
-
