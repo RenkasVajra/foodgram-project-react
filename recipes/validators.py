@@ -1,19 +1,15 @@
-from .forms import RecipesForm
-from .views import get_ingredients
-
-
 def validate_ingredients(request, form, ingredients):
     if ingredients is []:
         context = {
             "form": form,
-            "error": "Введите как минимум 1 ингредиент"
+            "error": "Р’РІРµРґРёС‚Рµ РєР°Рє РјРёРЅРёРјСѓРј 1 РёРЅРіСЂРµРґРёРµРЅС‚"
         }
         return context
     for item in ingredients:
         if not ingredients[item].exists():
             context = {
                 "form": form,
-                "error": "Такой ингредиент не существует"
+                "error": "РўР°РєРѕР№ РёРЅРіСЂРµРґРёРµРЅС‚ РЅРµ СЃСѓС‰РµСЃС‚РІСѓРµС‚"
             }
             return context
     for amount in ingredients.values():
@@ -21,6 +17,6 @@ def validate_ingredients(request, form, ingredients):
             context = {
                 "form": form,
                 "error":
-                    "Единицы измерения ингредиента не могу быть отрицательными"
+                    "Р•РґРёРЅРёС†С‹ РёР·РјРµСЂРµРЅРёСЏ РёРЅРіСЂРµРґРёРµРЅС‚Р° РЅРµ РјРѕРіСѓ Р±С‹С‚СЊ РѕС‚СЂРёС†Р°С‚РµР»СЊРЅС‹РјРё"
             }
             return context

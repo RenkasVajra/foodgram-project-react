@@ -173,7 +173,7 @@ def new_recipe(request):
                 count=count
             )
         )
-    validate_ingredients(request)
+    validate_ingredients(request, form, ingredients)
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect("index")
