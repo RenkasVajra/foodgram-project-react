@@ -172,6 +172,7 @@ def new_recipe(request):
                 count=count
             )
         )
+
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect("index")
