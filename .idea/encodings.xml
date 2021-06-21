@@ -2,11 +2,37 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/.env" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/.github/workflows/foodgram_workflow.yaml" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/abobus.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/apps.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/filters.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/migrations/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/serializers.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/api/views.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/db.sqlite3" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foodgram/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foodgram/asgi.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foodgram/settings.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foodgram/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/foodgram/wsgi.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/admin.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/apps.py" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/recipes/templates/includes/favorite_button.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/recipes/templates/includes/paginator.html" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/recipes/templates/includes/subscription_button.html" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/templatetags/button_filter.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/templatetags/tag_filter.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/templatetags/user_filters.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/recipes/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/__init__.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/apps.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/forms.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/models.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/templatetags/user_filters.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/urls.py" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/users/views.py" charset="UTF-8" />
     <file url="PROJECT" charset="windows-1251" />
   </component>
 </project>

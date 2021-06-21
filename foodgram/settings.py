@@ -32,6 +32,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 SITE_ID = 1
 
 ALLOWED_HOSTS = [
+    "localhost",
     "84.201.186.40"
 ]
 
