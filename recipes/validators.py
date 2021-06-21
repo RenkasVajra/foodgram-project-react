@@ -2,9 +2,7 @@ from .forms import RecipesForm
 from .views import get_ingredients
 
 
-def validate_ingredients(request,):
-    form = RecipesForm(request.POST or None, files=request.FILES or None)
-    ingredients = get_ingredients(request)
+def validate_ingredients(request, form, ingredients):
     if ingredients is []:
         context = {
             "form": form,
