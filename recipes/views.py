@@ -146,18 +146,19 @@ def get_ingredients(request):
 def new_recipe(request):
     form = RecipesForm(request.POST or None, files=request.FILES or None)
     ingredients = get_ingredients(request)
+    context = validate_ingredients(request, form, ingredients)
+    print(context)
+    if context:
+        return render(
+            request,
+            "formRecipe.html",
+            context
+        )
     if not form.is_valid():
         return render(
             request,
             "formRecipe.html",
             context={"form": form}
-        )
-    context = validate_ingredients(request, form, ingredients)
-    if validate_ingredients(request, form, ingredients):
-        return render(
-            request,
-            "formRecipe.html",
-            context
         )
     recipe = form.save(commit=False)
     recipe.author = request.user
@@ -187,6 +188,13 @@ def recipe_edit(request, id):
         instance=recipe
     )
     ingredients = get_ingredients(request)
+    context = validate_ingredients(request, form, ingredients)
+    if context:
+        return render(
+            request,
+            "formRecipe.html",
+            context
+        )
     if not form.is_valid():
         return render(
             request,
@@ -195,13 +203,6 @@ def recipe_edit(request, id):
                 "form": form,
                 "recipe": recipe
             },
-        )
-    context = validate_ingredients(request, form, ingredients)
-    if validate_ingredients(request, form, ingredients):
-        return render(
-            request,
-            "formRecipe.html",
-            context
         )
     recipe = form.save(commit=False)
     recipe.user = request.user
