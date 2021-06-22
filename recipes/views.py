@@ -146,24 +146,24 @@ def get_ingredients(request):
 def new_recipe(request):
     form = RecipesForm(request.POST or None, files=request.FILES or None)
     ingredients = get_ingredients(request)
-
     if not form.is_valid():
         return render(
             request,
             "formRecipe.html",
-            {
-                "form": form,
-                "is_new": True,
-            },
+            context={"form": form}
         )
-
+    context = validate_ingredients(request, form, ingredients)
+    if validate_ingredients(request, form, ingredients):
+        return render(
+            request,
+            "formRecipe.html",
+            context
+        )
     recipe = form.save(commit=False)
     recipe.author = request.user
     recipe.save()
-
     RecipeIngredient.objects.filter(recipe=recipe).delete()
     objs = []
-
     for title, count in ingredients.items():
         ingredient = get_object_or_404(Ingredient, title=title)
         objs.append(
@@ -173,7 +173,6 @@ def new_recipe(request):
                 count=count
             )
         )
-    validate_ingredients(request, form, ingredients)
     RecipeIngredient.objects.bulk_create(objs)
     form.save_m2m()
     return redirect("index")
@@ -196,6 +195,13 @@ def recipe_edit(request, id):
                 "form": form,
                 "recipe": recipe
             },
+        )
+    context = validate_ingredients(request, form, ingredients)
+    if validate_ingredients(request, form, ingredients):
+        return render(
+            request,
+            "formRecipe.html",
+            context
         )
     recipe = form.save(commit=False)
     recipe.user = request.user

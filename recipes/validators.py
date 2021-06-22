@@ -1,3 +1,8 @@
+from django.shortcuts import get_object_or_404
+
+from .models import Ingredient
+
+
 def validate_ingredients(request, form, ingredients):
     if ingredients is []:
         context = {
@@ -5,13 +10,19 @@ def validate_ingredients(request, form, ingredients):
             "error": "Введите как минимум 1 ингредиент"
         }
         return context
-    for item in ingredients:
-        if not ingredients[item].exists():
+
+    for title in ingredients.items():
+        ing_exists = Ingredient.objects.filter(title=title).exists()
+        if ing_exists:
             context = {
                 "form": form,
-                "error": "Такой ингредиент не существует"
             }
-            return context
+        context = {
+            "form": form,
+            "error": "Такой ингредиент не существует"
+        }
+        return context
+
     for amount in ingredients.values():
         if int(amount) <= 0:
             context = {
