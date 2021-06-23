@@ -15,7 +15,7 @@ flake8==3.8.4
 django-filter
 gunicorn==20.0.4
 pillow
-psycopg2
+psycopg2-binary
 django-simple-email-confirmation==0.70
 djangorestframework==3.11.0
 sorl-thumbnail
