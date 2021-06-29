@@ -58,12 +58,11 @@
             </div>
         </div>
         <div class="form__group">
-            <label for="id_description" class="form__label">Описание</label>
-            <div class="form__field-group">
-                {{ form.text|addclass:'form__input' }}
-                <span class="form__error"></span>
-            </div>
-        </div>
+          <span class="form__label">Загрузить фото</span>
+          <div class="form__field-group">
+            {{ form.image|addclass:"form__file-button" }}
+          </div>
+        </div
         <div class="form__group">
             <span class="form__label">Загрузить фото</span>
             <div class="form__field-group">
