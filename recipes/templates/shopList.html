@@ -15,7 +15,7 @@
             <div class="recipe recipe_reverse">
                 {% load thumbnail %}
                     {% thumbnail item.recipe.image "480x480" crop="center" upscale=True as im %}
-                    <img src="{{ im.url }}" alt="{{ recipe.title }}"
+                    <img src="{{ im.url }}" alt="{{ item.recipe.title }}"
                     class="recipe__image recipe__image_big" width="480" height="480">
                 {% endthumbnail %}
                 <h3 class="recipe__title"> {{ item.recipe.title }}</h3>
