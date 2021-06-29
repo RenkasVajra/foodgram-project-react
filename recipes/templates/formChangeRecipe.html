@@ -78,10 +78,18 @@
                 </div>
             </div>
             <div class="form__group">
-              <span class="form__label">Загрузить фото</span>
-              <div class="form__field-group">
-                {{ form.image|addclass:"form__file-button" }}
-              </div>
+                <span class="form__label">Загрузить фото</span>
+                <div class="form__field-group">
+                        <label for="{{ form.image.id_for_label }}" class="form__file-button">Выбрать файл</label>
+                        <div class="form__fileitem">{{ recipe.image.name }}</div>
+                        <div class="form__hidden">
+                            {{ form.image|addclass:"form__file" }}
+                        </div>
+                    <div class="form__filename"></div>
+                    {% for error in form.image.errors %}
+                        <span class="form__error">{{ error }}</span>
+                    {% endfor %}
+                </div>
             </div>
             <div class="form__footer">
                 <button class="button button_style_blue">Сохранить</button>
