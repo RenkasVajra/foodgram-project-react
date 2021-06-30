@@ -78,13 +78,10 @@
                 </div>
             </div>
             <div class="form__group">
-                <span class="form__label">Загрузить фото</span>
+                <span class="form__label"> Загрузить фото </span>
                 <div class="form__field-group">
-                    <input class="form__footer" type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" > {{ form.image.value|default_if_none:'' }}
-                    {% if form.errors %}
-                        <span class="form__error">{{ form.image.errors }}</span>
-                    {% endif %}
-                </div>
+                    {{ form.image }}
+                <span class="form__error"></span>
             </div>
             <div class="form__footer">
                 <button class="button button_style_blue">Сохранить</button>
