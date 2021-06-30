@@ -80,15 +80,10 @@
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                        <label for="{{ form.image.id_for_label }}" class="form__file-button">Выбрать файл</label>
-                        <div class="form__fileitem">{{ recipe.image.name }}</div>
-                        <div class="form__hidden">
-                            {{ form.image|addclass:"form__file" }}
-                        </div>
-                    <div class="form__filename"></div>
-                    {% for error in form.image.errors %}
-                        <span class="form__error">{{ error }}</span>
-                    {% endfor %}
+                    <input class="form__footer" type="file" name="{{ form.image.name }}" id="{{ form.image.id_for_label }}" > {{ form.image.value|default_if_none:'' }}
+                    {% if form.errors %}
+                        <span class="form__error">{{ form.image.errors }}</span>
+                    {% endif %}
                 </div>
             </div>
             <div class="form__footer">
