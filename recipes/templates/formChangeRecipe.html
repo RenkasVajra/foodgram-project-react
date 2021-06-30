@@ -78,11 +78,9 @@
                 </div>
             </div>
             <div class="form__group">
-                <span class="form__label">Загрузить фото</span>
+                <label for="{{ form.image.id_for_label }}" class="form__label">Загрузить изображение</label>
                 <div class="form__field-group">
-                    {{ form.image.widget }}
-                    <input type="file" name="image" id="id_file" value="{{ form.image.name }}">
-                    <span class="form__input-info">При редактировании фотография сохраняется</span>
+                    {{ form.image }}
                     <span class="form__error">{{ form.image.errors }}</span>
                 </div>
             </div>
