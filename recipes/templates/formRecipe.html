@@ -65,11 +65,14 @@
             </div>
         </div>
         <div class="form__group">
+            <span class="form__label">Загрузить фото</span>
             <div class="form__field-group">
-                <span class="form__label"> Загрузить фото </span>
-                    {{ form.image }}
-                <span class="form__error"></span>
+                {{ form.image.widget }}
+                <input type="file" name="image" id="id_file" value="{{ form.image.value }}">
+                <span class="form__input-info">При редактировании фотография сохраняется</span>
+                <span class="form__error">{{ form.image.errors }}</span>
             </div>
+        </div>
         <div class="form__footer">
             <button class="button button_style_blue">Создать рецепт</button>
         </div>
