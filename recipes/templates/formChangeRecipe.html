@@ -80,7 +80,7 @@
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                    {{ form.image.value }}
+                    {{ form.image.value|addclass:"form__label" }}
                     <input type="file" name="image" id="id_file" value="{{ form.image.name }}">
                     <span class="form__input-info">При редактировании фотография сохраняется</span>
                     <span class="form__error">{{ form.image.errors }}</span>
