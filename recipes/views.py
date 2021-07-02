@@ -231,7 +231,7 @@ def recipe_delete(request, id):
 def page_not_found(request, exception):
     return render(
         request,
-        "misc/404.html",
+        "errs/404.html",
         {"path": request.path},
         status=status.HTTP_404_NOT_FOUND,
     )
@@ -240,7 +240,7 @@ def page_not_found(request, exception):
 def server_error(request):
     return render(
         request,
-        "misc/500.html",
+        "errs/500.html",
         status=status.HTTP_500_INTERNAL_SERVER_ERROR
     )
 
