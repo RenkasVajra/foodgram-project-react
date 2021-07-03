@@ -32,7 +32,7 @@
             </div>
                 <ul class="single-card__items">
                       {% for tag in recipe.tags.all %}
-                        <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.display_name }}</span></li>
+                        <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
                       {% endfor %}
                 {% if user.is_authenticated %}
                     {% include 'includes/shopping_button.html' %}
