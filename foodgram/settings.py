@@ -19,7 +19,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-DEBUG = os.environ.get("DEBUG", False)
+DEBUG = os.environ.get("DEBUG")
+print(f'\n\n\n'
+      f'========'
+      f'\nDEBUG:{DEBUG}'
+      f'\n========='
+      f'\n\n\n')
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # Quick-start development settings - unsuitable for production
