@@ -37,7 +37,7 @@
                             <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
                         </ul>
                     {% endfor %}
-                </ul>
+                    </ul>
                 {% if user.is_authenticated %}
                     {% include 'includes/shopping_button.html' %}
                     {% if not request.user == recipe.author %}
