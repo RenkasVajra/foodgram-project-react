@@ -35,8 +35,8 @@ class RecipeQuerySet(models.QuerySet):
 class Tag(models.Model):
     class ChoiceTag(models.TextChoices):
         breakfast = "Завтрак"
-        dinner = "Обед"
-        lunch = "Ужин"
+        lunch = "Обед"
+        dinner = "Ужин"
 
     title = models.CharField(
         verbose_name="Название тега",

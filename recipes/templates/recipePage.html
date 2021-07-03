@@ -10,10 +10,8 @@
     <h1 class="main__title"></h1>
     <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
         {% load thumbnail %}
-        {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
-        <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}"
-                                                                                  alt="{{ recipe.title }}"
-                                                                                  class="card__image"></a>
+            {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
+            <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image">
         {% endthumbnail %}
         <div class="single-card__info">
             <div class="single-card__header-info">
@@ -26,18 +24,20 @@
                     </div>
                 {% endif %}
             </div>
-            <ul class="card__items">
-                {% for tag in recipe.tags.all %}
-                    <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
+
             <div class="single-card__items single-card__items_column">
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                 <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
 
             </div>
-            <ul class="single-card__items">
+                <ul class="single-card__items">
+                    <ul class="card__items">
+                    {% for tag in recipe.tags.all %}
+                        <ul class="card__items">
+                            <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
+                        </ul>
+                    {% endfor %}
+                </ul>
                 {% if user.is_authenticated %}
                     {% include 'includes/shopping_button.html' %}
                     {% if not request.user == recipe.author %}

@@ -1,8 +1,8 @@
 {% load button_filter %}
 <div class="card" data-id="{{ recipe.id }}">
     {% load thumbnail %}
-        {% thumbnail recipe.image "240" crop="center" upscale=True as im %}
-        <a href="{{ recipe.get_absolute_url }}" class="link" target="_blank"><img src="{{ im.url }}" alt="{{ recipe.title }}" class="card__image"></a>
+        {% thumbnail recipe.image "480x480" crop="center" upscale=True as im %}
+        <img src="{{ im.url }}" alt="{{ recipe.title }}" class="single-card__image">
     {% endthumbnail %}
         <div class="card__body">
             <a class="card__title link" href="{% url 'recipe' pk=recipe.id %}" target="_blank">{{ recipe.title }}</a>

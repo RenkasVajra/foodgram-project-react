@@ -53,5 +53,16 @@ urlpatterns = [
         views.ProfileView.as_view(),
         name="profile"
     ),
+    path(
+        '404/',
+        views.page_not_found,
+        name='404_error'
+    ),
+
+    path(
+        '500/',
+        views.server_error,
+        name='500_error'
+    ),
 
 ]
