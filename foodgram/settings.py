@@ -171,7 +171,7 @@ PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 
-ADMINS_EMAIL = "john@example.com"
+ADMINS_EMAIL = "foodgram@inbox.ru"
 
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
 
