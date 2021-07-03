@@ -6,17 +6,13 @@
     {% endthumbnail %}
         <div class="card__body">
             <a class="card__title link" href="{% url 'recipe' pk=recipe.id %}" target="_blank">{{ recipe.title }}</a>
-              <div class="form__field-group">
-                    <div class="tags">
-                        {% for tag in form.fields.tags.choices.queryset %}
-                            <div class="tags__item">
-                                <input type="checkbox" name="tags" value="{{ tag.id }}" id="id_{{ tag.title }}"
-                                class="tags__checkbox tags__checkbox_style_{{ tag.color }}" {% if tag in recipe.tags.all %}checked{% endif %}>
-                                <label for="id_tags_{{ tag.id }}" class="tags__label">{{ tag.title }}</label>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
+              <ul class="card__items">
+                {% for tag in recipe.tags.all %}
+                    <ul class="card__items">
+                        <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag }}</span></li>
+                    </ul> 
+                {% endfor %}
+              </ul>
               <div class="card__items card__items_column">
                 <p class="card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                 <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author %}" style="color: #000000">{{ recipe.author }}</a></p>
