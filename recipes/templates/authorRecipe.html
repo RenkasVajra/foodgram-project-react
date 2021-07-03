@@ -26,17 +26,21 @@
     {% if not request.user == recipe.author %}
         <div class="author-subscribe" data-author="{{ author.id }}">
             {% if author|is_following:request.user %}
+            <p style="padding: 0 0 2em 0;">
                 <li class="single-card__item">
                     <button class="button button_style_light-blue button_size_auto" name="subscribe">
                         Отписаться от автора
                     </button>
                 </li>
+            </p>
             {% else %}
+            <p style="padding: 0 0 2em 0;">
                 <li class="single-card__item">
                     <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
                         Подписаться на автора
                     </button>
                 </li>
+            </p>
         </div>
             {% endif %}
     {% endif %}
