@@ -20,6 +20,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv()
 
 DEBUG = os.environ.get("DEBUG")
+print(f'\n\n\n'
+      f'========'
+      f'\nDEBUG:{DEBUG}'
+      f'\n========='
+      f'\n\n\n')
 
 SECRET_KEY = os.environ.get("SECRET_KEY")
 # Quick-start development settings - unsuitable for production
@@ -32,8 +37,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 SITE_ID = 1
 
 ALLOWED_HOSTS = [
+    "84.252.134.130",
     "localhost",
-    "84.201.186.40"
 ]
 
 APPEND_SLASH = False
@@ -99,12 +104,12 @@ WSGI_APPLICATION = "foodgram.wsgi.application"
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),
-        'NAME': os.environ.get('DB_NAME', 'postgres'),
-        'USER': os.environ.get('POSTGRES_USER', 'postgres'),
-        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', 'postgres'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
-        'PORT': os.environ.get('DB_PORT', '5432'),
+        'ENGINE': os.environ.get('DB_ENGINE', ),
+        'NAME': os.environ.get('DB_NAME', ),
+        'USER': os.environ.get('POSTGRES_USER', ),
+        'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ),
+        'HOST': os.environ.get('DB_HOST', ),
+        'PORT': os.environ.get('DB_PORT', ),
     }
 }
 
