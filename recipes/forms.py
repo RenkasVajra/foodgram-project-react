@@ -14,6 +14,7 @@ class RecipesForm(ModelForm):
             "ingredient": "Ингредиенты",
             "cook_time": "Время приготовления",
             "tags": "Теги",
+            "image": "Картинка",
         }
 
         widgets = {"tags": forms.CheckboxSelectMultiple()}
