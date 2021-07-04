@@ -8,8 +8,7 @@
 {{ follow.author.recipes.all }}
 <div class="main__header">
     <h1 class="main__title">{{ author.username }}</h1>
-</div>
-<ul class="tags">
+    <ul class="tags">
     {% with active_tags=request.GET|get_tags %}
     {% for tag in all_tags|all_tags %}
         <li class="tags__item">
@@ -22,6 +21,8 @@
     {% endfor %}
     {% endwith %}
 </ul>
+</div>
+
 {% if user.is_authenticated %}
     {% if not request.user == recipe.author %}
         <div class="author-subscribe" data-author="{{ author.id }}">
