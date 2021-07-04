@@ -3,7 +3,7 @@
 {% load tag_filter %}
 {% load button_filter %}
 {% block content %}
-<title>{% block title %}Рецепты{% endblock %} </title>
+<title>{% block title %}{{ author.username }}{% endblock %} </title>
 <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {{ follow.author.recipes.all }}
 <div class="main__header">
@@ -28,19 +28,15 @@
         <div class="author-subscribe" data-author="{{ author.id }}">
             {% if author|is_following:request.user %}
             <p style="padding: 0 0 2em 0;">
-                <li class="single-card__item">
                     <button class="button button_style_light-blue button_size_auto" name="subscribe">
                         Отписаться от автора
                     </button>
-                </li>
             </p>
             {% else %}
             <p style="padding: 0 0 2em 0;">
-                <li class="single-card__item">
                     <button class="button button_style_light-blue button_size_auto" name="subscribe" data-out>
                         Подписаться на автора
                     </button>
-                </li>
             </p>
         </div>
             {% endif %}
