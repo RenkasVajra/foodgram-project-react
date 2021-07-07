@@ -37,7 +37,7 @@ urlpatterns = [
         name="password_reset_confirm"
     ),
     path(
-        "reset/done",
+        "reset/complete",
         url_views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete"
     )

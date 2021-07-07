@@ -164,21 +164,14 @@ LOGOUT_REDIRECT_URL = "index"
 
 PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp .EmailBackend"
-
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 ADMINS_EMAIL = "foodgram@inbox.ru"
-
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "sent_emails")
-
 EMAIL_HOST = "smtp.inbox.ru"
-
 EMAIL_HOST_USER = "foodgram@inbox.ru"
-
 EMAIL_HOST_PASSWORD = "OOHyP3ougn3-"
-
 EMAIL_PORT = 465
-
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
