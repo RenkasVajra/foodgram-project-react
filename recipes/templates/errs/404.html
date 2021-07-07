@@ -1,7 +1,10 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
+{% load static %}
 {% block title %} Ошибка 404 {% endblock %}
 {% block content %}
-
+{% block static_css %}
+<link rel="stylesheet" href="{% static 'pages/form.css' %}">
+{% endblock %}
 <div class="row">
     <div class="col-md-12">
         <h1>Ошибка 404</h1>
