@@ -166,7 +166,7 @@ PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.ru=com"
-EMAIL_PORT = "587"
+EMAIL_PORT = 587
 EMAIL_HOST_USER = "servicefoodgram@gmail.com"
 EMAIL_HOST_PASSWORD = "OOHyP3ougn3"
 EMAIL_USE_TLS = True
