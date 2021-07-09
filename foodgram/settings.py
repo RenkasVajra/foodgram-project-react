@@ -162,7 +162,6 @@ LOGIN_REDIRECT_URL = "index"
 
 LOGOUT_REDIRECT_URL = "index"
 
-PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 DEFAULT_FROM_EMAIL = "servicefoodgram@gmail.com"
