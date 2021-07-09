@@ -165,10 +165,10 @@ LOGOUT_REDIRECT_URL = "index"
 PASSWORD_RESET_TIMEOUT_DAYS = "1"
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.yandex.ru"
-EMAIL_PORT = 465
-EMAIL_HOST_USER = "servicefoodgram@yandex.ru"
-EMAIL_HOST_PASSWORD = "qwqwqw123"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_HOST_USER = "servicefoodgram@gmail.com"
+EMAIL_HOST_PASSWORD = "OOHyP3ougn3"
 EMAIL_USE_TLS = True
 
 REST_FRAMEWORK = {
