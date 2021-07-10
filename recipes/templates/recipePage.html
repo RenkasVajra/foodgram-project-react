@@ -29,10 +29,10 @@
                 {% for tag in recipe.tags.all %}
                     <li class="single-card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
                 {% endfor %}
-                <div class="single-card__items single-card__items_column">
+            </div>
+            <div class="single-card__items single-card__items_column">
                     <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                     <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
-                </div>
             </div>
                 <ul class="single-card__items">
                 {% if user.is_authenticated %}
