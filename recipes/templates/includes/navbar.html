@@ -2,7 +2,7 @@
 <div class="nav__container container">
             {% if user.is_authenticated %}
                 <ul class="nav__items list">
-                    <li class="nav__item {% if request.resolver_match.url_name == '/' %} nav__item_active {% endif %}">
+                    <li class="nav__item {% if request.resolver_match.url_name == 'index' %} nav__item_active {% endif %}">
                         <a href="/" class="nav__link link">Рецепты</a></li>
                     <li class="nav__item {% if request.resolver_match.url_name == 'subscriptions' %} nav__item_active {% endif %}">
                         <a href="{% url 'subscriptions'  %}" class="nav__link link">Мои подписки</a></li>
@@ -25,7 +25,7 @@
                 </ul>
             {% else %}
                 <ul class="nav__items list">
-                    <li class="nav__item {% if request.resolver_match.url_name == '/' %} nav__item_active {% endif %}">
+                    <li class="nav__item {% if request.resolver_match.url_name == 'index' %} nav__item_active {% endif %}">
                         <a href="/" class="nav__link link">Рецепты</a></li>
                 </ul>
                 <ul class="nav__items list">
