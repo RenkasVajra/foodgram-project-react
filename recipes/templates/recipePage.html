@@ -25,14 +25,13 @@
                 {% endif %}
             </div>
 
-            <div class="single-card__items ">
+            <ul class="single-card__items ">
                 {% for tag in recipe.tags.all %}
                     <li class="single-card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
                 {% endfor %}
                 <p class="single-card__text"><span class="icon-time"></span> {{ recipe.cook_time }} мин.</p>
                 <p class="single-card__text"><span class="icon-user"></span> {{ recipe.author }}</p>
-
-            </div>
+            </ul>
                 <ul class="single-card__items">
                 {% if user.is_authenticated %}
                     {% include 'includes/shopping_button.html' %}
