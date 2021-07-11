@@ -19,7 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv()
 
-DEBUG = bool(os.getenv("DEBUG", False)) == "True"
+DEBUG = True
+# bool(os.getenv("DEBUG", False)) == "True"
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 # Quick-start development settings - unsuitable for production
