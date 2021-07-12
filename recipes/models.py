@@ -83,7 +83,6 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         upload_to="recipes/",
-        null=True,
         blank=True
     )
     pub_date = models.DateTimeField(

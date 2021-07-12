@@ -14,12 +14,15 @@ from .models import (
 class TagAdmin(admin.ModelAdmin):
     model = Tag
     list_display = ("title",)
+    list_filter = ("title",)
+    search_fields = ("title",)
 
 
 class FavoriteRecpiesInline(admin.TabularInline):
     model = FavoriteRecipes
     extra = 1
     raw_id_fields = ("favorite",)
+    list_filter = ("author",)
 
 
 class MembershipInline(admin.TabularInline):
@@ -33,12 +36,14 @@ class RecipeAdmin(admin.ModelAdmin):
         MembershipInline,
         FavoriteRecpiesInline,
     )
-    list_filter = ("author", "title", "tags")
+    list_filter = ("author", "title", "tags", "ingredient", "cook_time")
+    search_fields = ("author", "ingredient", "title", "tags")
 
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = ("title", "unit")
-    list_filter = ("title",)
+    list_filter = ("title", "unit")
+    search_fields = ("title",)
 
 
 admin.site.register(Tag, TagAdmin)
