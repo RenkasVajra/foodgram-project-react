@@ -60,9 +60,9 @@ class ShoppinglistAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Tag, TagAdmin)
-admin.site.register(FavoriteRecipes, FavoriteRecpiesInline)
+admin.site.register(FavoriteRecipes, )
 admin.site.register(ShoppingList, ShoppinglistAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
-admin.site.register(RecipeIngredient, MembershipInline)
+admin.site.register(RecipeIngredient, )
 admin.site.register(Follow, FollowAdmin)
