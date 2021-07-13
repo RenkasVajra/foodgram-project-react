@@ -49,8 +49,8 @@ class IngredientAdmin(admin.ModelAdmin):
 
 class FollowAdmin(admin.ModelAdmin):
     model = Follow
-    list_display = ("follower", "following")
-    search_fields = ("follower", "following")
+    list_display = ("author", "user")
+    search_fields = ("author", "user")
 
 
 class ShoppinglistAdmin(admin.ModelAdmin):
