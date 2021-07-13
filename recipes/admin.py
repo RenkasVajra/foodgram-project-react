@@ -14,7 +14,6 @@ from .models import (
 class TagAdmin(admin.ModelAdmin):
     model = Tag
     list_display = ("title",)
-    list_filter = ("title",)
     search_fields = ("title",)
 
 
@@ -23,12 +22,14 @@ class FavoriteRecpiesInline(admin.TabularInline):
     extra = 1
     raw_id_fields = ("favorite",)
     list_filter = ("author",)
+    search_fields = ("author", "title")
 
 
 class MembershipInline(admin.TabularInline):
     model = RecipeIngredient
     extra = 1
     raw_id_fields = ("ingredient",)
+    search_fields = ("title",)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -41,9 +42,15 @@ class RecipeAdmin(admin.ModelAdmin):
 
 
 class IngredientAdmin(admin.ModelAdmin):
+    model = Ingredient
     list_display = ("title", "unit")
-    list_filter = ("title", "unit")
-    search_fields = ("title",)
+    search_fields = ("title", "unit")
+
+
+class FollowAdmin(admin.ModelAdmin):
+    model = Follow
+    list_display = ("follower", "following")
+    search_fields = ("follower", "following")
 
 
 admin.site.register(Tag, TagAdmin)

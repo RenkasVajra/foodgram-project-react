@@ -69,7 +69,8 @@ class Recipe(models.Model):
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="recipes"
+        related_name="recipes",
+        verbose_name="Автор"
     )
     text = models.TextField(
         max_length=3000,
@@ -83,6 +84,7 @@ class Recipe(models.Model):
     )
     image = models.ImageField(
         upload_to="recipes/",
+        verbose_name="Картинка"
     )
     pub_date = models.DateTimeField(
         auto_now_add=True,
@@ -111,10 +113,12 @@ class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        related_name="recipe"
+        related_name="recipe",
+        verbose_name="Рецепт"
     )
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, related_name="recipe_ing"
+        Ingredient, on_delete=models.CASCADE, related_name="recipe_ing",
+        verbose_name="Ингредиенты"
     )
     count = models.PositiveIntegerField()
 
@@ -159,6 +163,7 @@ class ShoppingList(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="buyer",
+        verbose_name="Автор"
     )
     recipe = models.ForeignKey(
         Recipe,
