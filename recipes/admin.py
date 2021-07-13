@@ -59,10 +59,22 @@ class ShoppinglistAdmin(admin.ModelAdmin):
     search_fields = ("recipe", "user")
 
 
+class FavoriteRecipesAdmin(admin.ModelAdmin):
+    model = FavoriteRecipes
+    list_display = ("favorite", "user")
+    search_fields = ("favorite", "user")
+
+
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    model = RecipeIngredient
+    list_display = ("recipe", "ingredient", "count")
+    search_fields = ("recipe", "ingredient")
+
+
 admin.site.register(Tag, TagAdmin)
-admin.site.register(FavoriteRecipes, FavoriteRecpiesInline)
+admin.site.register(FavoriteRecipes, FavoriteRecipesAdmin)
 admin.site.register(ShoppingList, ShoppinglistAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Recipe, RecipeAdmin)
-admin.site.register(RecipeIngredient, )
+admin.site.register(RecipeIngredient, RecipeIngredientAdmin)
 admin.site.register(Follow, FollowAdmin)
