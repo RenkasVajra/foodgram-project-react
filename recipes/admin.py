@@ -53,6 +53,12 @@ class FollowAdmin(admin.ModelAdmin):
     search_fields = ("follower", "following")
 
 
+class ShoppinglistAdmin(admin.ModelAdmin):
+    model = ShoppingList
+    list_display = ("recipe", "user")
+    search_fields = ("recipe", "user")
+
+
 admin.site.register(Tag, TagAdmin)
 admin.site.register(FavoriteRecipes)
 admin.site.register(ShoppingList)
