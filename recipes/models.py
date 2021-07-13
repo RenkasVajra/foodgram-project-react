@@ -128,7 +128,7 @@ class RecipeIngredient(models.Model):
         Ingredient, on_delete=models.CASCADE, related_name="recipe_ing",
         verbose_name="Ингредиенты"
     )
-    count = models.PositiveIntegerField(verbose_name="Кол-во")
+    count = models.PositiveIntegerField(verbose_name="Количество")
 
     class Meta:
         verbose_name = "Ингредиенты рецепта"
