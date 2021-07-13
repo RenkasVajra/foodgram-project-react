@@ -8,8 +8,14 @@ User = get_user_model()
 
 
 class Ingredient(models.Model):
-    title = models.CharField(max_length=300)
-    unit = models.CharField(max_length=200)
+    title = models.CharField(
+        max_length=300,
+        verbose_name="Название"
+    )
+    unit = models.CharField(
+        max_length=200,
+        verbose_name="Единицы измерения"
+    )
 
     class Meta:
         verbose_name = "Ингредиент"
@@ -76,7 +82,9 @@ class Recipe(models.Model):
         max_length=3000,
         verbose_name="Текст рецепта"
     )
-    cook_time = models.PositiveIntegerField()
+    cook_time = models.PositiveIntegerField(
+        verbose_name="Время приготовления"
+    )
     ingredient = models.ManyToManyField(
         Ingredient,
         through="RecipeIngredient",
@@ -120,7 +128,7 @@ class RecipeIngredient(models.Model):
         Ingredient, on_delete=models.CASCADE, related_name="recipe_ing",
         verbose_name="Ингредиенты"
     )
-    count = models.PositiveIntegerField()
+    count = models.PositiveIntegerField(verbose_name="Кол-во")
 
     class Meta:
         verbose_name = "Ингредиенты рецепта"
